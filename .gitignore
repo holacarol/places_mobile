@@ -1,0 +1,9 @@
+# Just in case Mac adds some useless files
+.DS_Store
+
+# Initially we are going to ignore the directory with the lungo Library
+lungo.js/*
+
+# And then also the server directory where we just put the fake data
+server/*
+

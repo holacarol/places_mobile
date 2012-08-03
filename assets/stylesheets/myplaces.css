@@ -1,0 +1,19 @@
+.threeitems a {
+	width: 33%;
+}
+
+.oneitem a {
+	width: 100%;
+}
+
+.twoitems a {
+	width: 50%;
+}
+
+.floatbar {
+	background: rgba(0, 0, 0, 0.9);
+}
+
+.floatbar a {
+	width: 100%;
+}
