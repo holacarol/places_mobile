@@ -3,7 +3,7 @@ App.Services = (function(lng, app, undefined) {
 	/** Demonstration Server URL **/
     var PLACES_API_URL = 'http://192.168.1.132:3000/';
     /** Local Server URL **/
-    // var PLACES_API_URL = "/server/";
+    // var PLACES_API_URL = "server/";
 
 	var markers = {
 	                user: {
@@ -34,7 +34,7 @@ App.Services = (function(lng, app, undefined) {
 	{
 		// var url = 'http://127.0.0.1:8000/myplaces/server/user.places.get.json';
 		var url = PLACES_API_URL + 'places.json';
-		var data = {callback: '?'};
+		var data = {callback : '?'};
 
 		$$.json(url, data, function(response) {
 			console.error(response);
@@ -59,6 +59,27 @@ App.Services = (function(lng, app, undefined) {
 				data: response.recommended
 			});
 
+			App.Events.createPlacesTapEvents();
+
+		});
+	};
+
+	var loadUserFriends = function ()
+	{
+		// var url = 'http://127.0.0.1:8000/myplaces/server/user.places.get.json';
+		var url = PLACES_API_URL + 'contacts.json';
+		var data = {callback : '?'};
+
+		$$.json(url, data, function(response) {
+			console.error(response);
+
+			App.Data.userFriends = response;
+
+			lng.View.Template.List.create({
+				el: "#friend-list-content",
+				template: "friend-in-list",
+				data: response
+			});
 		});
 	};
 
@@ -111,6 +132,7 @@ App.Services = (function(lng, app, undefined) {
 	return {
 		initUser : initUser, 
 		loadUserPlaces : loadUserPlaces,
+		loadUserFriends : loadUserFriends,
 		loadMap : loadMap,
 		getUserLocation : getUserLocation,
 		markers : markers
