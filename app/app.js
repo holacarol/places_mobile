@@ -17,7 +17,7 @@ var App = (function(lng, undefined) {
     });
 
     return {
-
+        
     };
 
 })(LUNGO);
