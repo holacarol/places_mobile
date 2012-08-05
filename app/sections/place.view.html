@@ -1,8 +1,20 @@
 <section id="place-view">
 	<header data-back="left" data-title="Place Name">
 	</header>
-	<article id="place-description"></article>
-	<article id="place-map" class="map"></article>
-	<article id="place-comments-all" class="list scrollable"></article>
-	<article id="place-comments-friends" class="list scrollable"></article>
+	<article id="place-description" class="">
+		<div class="place info"></div>
+		<div id="placemapview" class="map small"></div>
+		<div id="place-comments">
+			<div class="right-aligned"><a href="#" class="link switch friends">See only friends comments</a></div>
+			<div id="list" class="list comments indented"><ul></ul></div>
+		</div>
+	</article>
+		<!--
+	<article id="place-comments" class="list scrollable indented blue">
+		<div class="selector"><a href="#" class="link">Show all comments</a></div>
+		<div id="place-comments-list" class="list scrollable indented blue">
+		</div>
+	</article>
+		-->
+	<!--<article id="place-comments-friends" class="list scrollable indented blue"></article>-->
 </section>
