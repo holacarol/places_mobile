@@ -1,32 +1,14 @@
 App.Services = (function(lng, app, undefined) {
 
 	/** Demonstration Server URL **/
-    // var PLACES_API_URL = 'http://192.168.1.132:3000/';
+    // var PLACES_API_URL = 'http://192.168.1.129:3000/';
     /** Local Server URL **/
     var PLACES_API_URL = "server/";
-
-	var markers = {
-	                user: {
-	                    url: 'assets/images/ikwb-p-as.png',
-	                    size: {x: 22, y: 37},
-	                    anchor: {x: 11, y: 37}
-	                },
-	                friends: {
-	                    url: 'assets/images/ikwb-p-ss.png',
-	                    size: {x: 22, y: 37},
-	                    anchor: {x: 11, y: 37}
-	                },
-	                recommended: {
-	                    url: 'assets/images/ikwb-p-ns.png',
-	                    size: {x: 22, y: 37},
-	                    anchor: {x: 11, y: 37}
-	                }
-	            };
 
 	var initUser = function ()
 	{
 		loadUserPlaces();
-		getUserLocation();
+		requestUserLocation();
 
 	}
 
@@ -59,7 +41,13 @@ App.Services = (function(lng, app, undefined) {
 				data: response.recommended
 			});
 
-			App.Events.createPlacesTapEvents();
+			App.View.markPlacesListAsLiked(response.myplaces,'section#place-list');
+			App.View.markPlacesListAsLiked(response.friends,'section#place-list');
+			App.View.markPlacesListAsLiked(response.recommended,'section#place-list');
+
+			// App.Events.createPlacesTapEvents('section#place-list article.list');
+			// App.Events.createLikeTapEvents('section#place-list article.list');
+			// App.Events.createLikeTapEvents();
 
 		});
 	};
@@ -105,9 +93,39 @@ App.Services = (function(lng, app, undefined) {
 
 		});
 
-	}
+	};
 
-	var getUserLocation = function ()
+	var doLike = function (place_id) 
+	{
+		var place = App.Data.getPlace(place_id);
+		var post_activity_id = place.post_activity_id;
+		var url = PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
+		var data = {};
+
+		$$.post(url, data, function(response) {
+			console.error("like done");
+		}, "application/json");
+	};
+
+	var undoLike = function (place_id) 
+	{
+		var place = App.Data.getPlace(place_id);
+		var post_activity_id = place.post_activity_id;
+		var url = PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
+		var data = {_method : "delete"};
+
+		$$.ajax({
+			type: "POST",
+        	url: url,
+        	data: { _method : "delete"},
+        	success: function(response) { console.error("unlike done"); },
+        	dataType: "application/json",
+        	contentType: "application/x-www-form-urlencoded"
+        	// headers: {'X_METHODOVERRIDE': 'DELETE'}
+        });	
+	};
+
+	var requestUserLocation = function ()
 	{
 		//check if the geolocation object is supported, if so get position
 		if (navigator.geolocation)
@@ -126,67 +144,15 @@ App.Services = (function(lng, app, undefined) {
 		console.error(error);
 	} 
 
-	var loadMap = function()
-	{
-	    lng.Sugar.GMap.init({
-	            el: '#fullmapview',
-	            zoom: 14,
-	            //type: 'HYBRID',
-	            center: App.Data.userLocation,
-	            overviewMapControl: true
-	    });
-
-		_placeMarkers(App.Data.userPlaces.myplaces,App.Services.markers.user);
-		_placeMarkers(App.Data.userPlaces.friends,App.Services.markers.friends);
-		_placeMarkers(App.Data.userPlaces.recommended,App.Services.markers.recommended);
-	}
-
-	var renderPlaceMap = function(place)
-	{
-		console.error("Initializing map...");
-		lng.Sugar.GMap.init({
-	            el: 'div#placemapview',
-	            zoom: 14,
-	            minZoom: 14,
-	            maxZoom: 14,
-	            //type: 'HYBRID',
-	            center: place,
-	            draggable: false,
-	            disableDoubleClickZoom: true,
-
-	    });
-		console.error("Placing markers...");
-		_placeMarker(place,App.Services.markers.user);
-	}
-
-	var _placeMarkers = function (places, marker) {
-	    for (var i=0; i<places.length; i++) {
-			place = places[i];
-			_placeMarker(place,marker);
-			/*
-			lng.Sugar.GMap.addMarker(
-				{ latitude : place.latitude,
-				  longitude : place.longitude },
-				marker,
-				false
-			);
-			*/
-		};
-	}
-
-	var _placeMarker = function (place, marker) {
-		lng.Sugar.GMap.addMarker(place,marker,false);
-	}
 
 	return {
 		initUser : initUser, 
 		loadUserPlaces : loadUserPlaces,
 		loadUserFriends : loadUserFriends,
-		loadMap : loadMap,
-		renderPlaceMap : renderPlaceMap,
-		getUserLocation : getUserLocation,
+		requestUserLocation : requestUserLocation,
 		loadPlaceInformation : loadPlaceInformation,
-		markers : markers
+		doLike : doLike,
+		undoLike : undoLike,
 	}
 
 })(LUNGO, App);

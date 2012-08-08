@@ -5,7 +5,7 @@ App.Events = (function(lng, app, undefined) {
 	});
 
 	lng.dom('a.mapbutton').tap(function(event) {
-    	App.Services.loadMap();
+    	App.View.Map.renderApplicationMap();
 	});
 
 	lng.dom('a.friendbutton').tap(function(event) {
@@ -16,16 +16,46 @@ App.Events = (function(lng, app, undefined) {
 		App.View.switchComments('#place-comments');
 	});
 
-	var createPlacesTapEvents = function () {
+	lng.dom('section#place-list li').tap(function(event) {
+		var place = lng.dom(this);
+		// console.error(place);
+		var id = place.attr('id').replace('place-','');
+		App.Services.loadPlaceInformation(id);
+		App.View.createPlaceView(App.Data.getPlace(id));
+	});
+
+	lng.dom('a.event.like').tap(function(event) {
+		var place = lng.dom(this).parent().parent();
+		// console.error(place);
+		var id = place.attr('id').replace('place-','');
+		// console.error("likes place "+id);
+	});
+
+/**
+	var createPlacesTapEvents = function (container) {
+		var prefix = '';
+		if (container) { prefix = container + ' '; }
 		console.error('Create Places Tap Events');
-		lng.dom('section#place-list li').tap(function(event) {
+		lng.dom(prefix + 'li').tap(function(event) {
 			var place = lng.dom(this);
 			console.error(place);
-			App.Services.loadPlaceInformation(place.attr('id'));
-			App.View.createPlaceView(App.Data.getPlace(place.attr('id')));
+			var id = place.attr('id').replace('place-','');
+			App.Services.loadPlaceInformation(id);
+			App.View.createPlaceView(App.Data.getPlace(id));
 		})
 	};
 
+	var createLikeTapEvents = function (container) {
+		var prefix = '';
+		if (container) { prefix = container + ' '; }
+		lng.dom(prefix+'a.event.like').tap(function(event) {
+			var place = lng.dom(this).parent().parent();
+			console.error(place);
+			var id = place.attr('id').replace('place-','');
+			console.error("likes place "+id);
+		})
+	}
+**/
 /**
 	var createFriendsTapEvents = function () {
 		console.error('Create Places Tap Events');
@@ -40,7 +70,10 @@ App.Events = (function(lng, app, undefined) {
 **/
 
     return {
-    	createPlacesTapEvents : createPlacesTapEvents
+    	/**
+    	createPlacesTapEvents : createPlacesTapEvents,
+    	createLikeTapEvents : createLikeTapEvents,
+    	**/
     }
 
 })(LUNGO, App);

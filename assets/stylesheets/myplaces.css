@@ -11,6 +11,11 @@
 	background-color: transparent;
 }
 
+.gray {
+	color:#CCCCCC;
+	background-color: transparent;
+}
+
 .bigicon {
 	-webkit-transform: scale(1.5);
 	-moz-transform: scale(1.5);
