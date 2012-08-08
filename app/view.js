@@ -3,6 +3,8 @@ App.View = (function(lng, app, undefined) {
 	/** MAP CONTROLLER OBJECT **/
 	var Map = (function(lng, app, undefined) {
 
+		var DEFAULT_MARKER = "user";
+
 		var markers = 
 		{
             user: {
@@ -22,24 +24,39 @@ App.View = (function(lng, app, undefined) {
             }
         };
 
-	    var renderApplicationMap = function()
+	    var renderPlaceListMap = function(center, places, type)
 		{
-		    lng.Sugar.GMap.init({
-		            el: '#map-fullview',
-		            zoom: 14,
-		            //type: 'HYBRID',
-		            center: App.Data.userLocation,
-		            overviewMapControl: true
-		    });
+			lng.Sugar.GMap.init({
+			        el: '#map-fullview',
+			        zoom: 14,
+			        //type: 'HYBRID',
+			        center: center,
+			        overviewMapControl: true
+			});
 
-			_placeMarkers(App.Data.userPlaces.myplaces,"user");
-			_placeMarkers(App.Data.userPlaces.friends,"friends");
-			_placeMarkers(App.Data.userPlaces.recommended,"recommended");
+		    if (lng.Core.toType(places) == 'object') {
+				_placeMarkers(places.myplaces,"user");
+				_placeMarkers(places.friends,"friends");
+				_placeMarkers(places.recommended,"recommended");
+		    }
+
+			if (lng.Core.toType(places) == 'array') {
+				_placeMarkers(places,type);
+			}
 		}
+
+	    var renderPlaceNavigationalMap = function(place) {
+	    	lng.Sugar.GMap.init({
+	    			el: '#map-fullview',
+	    			zoom: 14,
+	    			center: place,
+	    			overviewMapControl: true
+	    	});
+	    	_placeMarker(place,'user');
+	    }
 
 		var renderPlaceMap = function(place)
 		{
-			console.error("Initializing map...");
 			lng.Sugar.GMap.init({
 		            el: '#map-placeview',
 		            zoom: 14,
@@ -51,14 +68,13 @@ App.View = (function(lng, app, undefined) {
 		            disableDoubleClickZoom: true,
 
 		    });
-			console.error("Placing markers...");
 			_placeMarker(place,"user");
 		}
 
 		var _placeMarkers = function (places, marker) {
 		    for (var i=0; i<places.length; i++) {
 				place = places[i];
-				_placeMarker(place,markers[marker]);
+				_placeMarker(place,marker);
 				/*
 				lng.Sugar.GMap.addMarker(
 					{ latitude : place.latitude,
@@ -70,13 +86,22 @@ App.View = (function(lng, app, undefined) {
 			};
 		}
 
-		var _placeMarker = function (place, marker) {
-			lng.Sugar.GMap.addMarker(place,markers[marker],false);
+		var _placeMarker = function (place, marker) 
+		{
+			lng.Sugar.GMap.addMarker(place,_getMarker(marker),false);
+		}
+
+		var _getMarker = function (type) 
+		{
+			type = (type==undefined)?"user":type;
+			marker = (markers[type]!=undefined)?markers[type]:markers[DEFAULT_MARKER];
+			return marker;
 		}
 
 		return{
-			renderApplicationMap : renderApplicationMap,
+			renderPlaceListMap : renderPlaceListMap,
 			renderPlaceMap : renderPlaceMap,
+			renderPlaceNavigationalMap : renderPlaceNavigationalMap,
 		}
 
 	})(LUNGO, App);
@@ -107,6 +132,18 @@ App.View = (function(lng, app, undefined) {
 		 </li>'
 	);
 
+	/**
+	 *  Template for comment box
+	 */
+	lng.View.Template.create('comments-box',
+		'<div class="right-aligned">\
+			<a href="#" class="link switch friends">See only friends comments</a>\
+		 </div>\
+		 <div id="list" class="list comments indented">\
+		 	<ul></ul>\
+		 </div>'
+	);
+
 	/** 
 	  *  Template for comments in a place 
 	  */
@@ -122,16 +159,30 @@ App.View = (function(lng, app, undefined) {
 	  *  Template for description of a place 
 	  */
 	lng.View.Template.create('place-description',
-		'<div id="place-{{id}}">\
+		'<div id="place-{{id}}" class="place">\
 			<div class="onright"><a class="event like">href="#"><span class="icon star yellow bigicon"></span></a></div>\
-			<div class="onleft" class="icon pushpin smallicon"><span class="icon pushpin smallicon"></span></div>\
-			<div class="place field">\
-				<p>\
-				{{address.streetAddress}}<br>\
-				{{address.postalCode}}, {{address.locality}}. {{address.country}}\
+			<div>\
+				<div class="address info text">\
+					<div class="onleft iconset"><span class="icon pushpin bigicon"></span></div>\
+					<div>\
+						<p>\
+						{{address.streetAddress}}<br>\
+						{{address.postalCode}}, {{address.locality}}. {{address.country}}\
+						<p>\
+					</div>\
+				</div>\
+				<div class="contact info text">\
+					<div class="onleft iconset"><span class="icon phone bigicon"></span></div>\
+					<div>\
+						<p>\
+						{{phone_number}}<br>\
+						<a href="{{url}}">{{url}}</a>\
+					</div>\
+				<div>\
 			</div>\
-			<div class"place field">\
-				<span class="icon phone smallicon"></span><small>{{phone_number}}. {{url}}</small>\
+			<div class="place field title">\
+				<div>\
+				</div>\
 			</div>\
 		</div>'
 	);
@@ -144,7 +195,7 @@ App.View = (function(lng, app, undefined) {
 		/** Change the title **/
 		lng.dom('section#place-view header span.title').html(place.title);
 		/** Remove old comments */
-		lng.dom('#place-comments .list ul').html('');
+		lng.dom('.place.comments').html('');
 		/** Render the description template **/
 		lng.View.Template.render('section#place-view article#place-description .info', 'place-description', place);
 		/** Render the small map for the place **/

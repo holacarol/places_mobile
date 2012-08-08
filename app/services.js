@@ -84,9 +84,9 @@ App.Services = (function(lng, app, undefined) {
 /**
 			App.View.createPlaceView(place);
 **/
-
+			lng.View.Template.render('section#place-view article#place-description .comments', 'comments-box', {});
 			lng.View.Template.List.create({
-				el: "#place-comments .list",
+				el: ".place.comments .list",
 				template: "comment",
 				data: comments
 			});

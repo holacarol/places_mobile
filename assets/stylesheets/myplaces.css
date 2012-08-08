@@ -6,26 +6,6 @@
 	width: 100%;
 }
 
-.yellow {
-	color:#ffb515;
-	background-color: transparent;
-}
-
-.gray {
-	color:#CCCCCC;
-	background-color: transparent;
-}
-
-.bigicon {
-	-webkit-transform: scale(1.5);
-	-moz-transform: scale(1.5);
-}
-
-.smallicon {
-	-webkit-transform: scale(0.5);
-	-moz-transform: scale(0.5);
-}
-
 img.thumbnail {
 	width: 20px;
 	height: 20px;
@@ -35,6 +15,7 @@ img.thumbnail {
 	width: 100%;
 	height: 200px;
 }
+
 
 .place.info {
 	background-color: #FFFFFF;
@@ -63,4 +44,39 @@ a.switch {
 .right-aligned {
 	text-align: right;
 	margin: 8px 11px 0px 11px;
+}
+
+.info.text, .info.text a, .info.text .icon { color: #797979; text-shadow: 0px 1px 0px #fff; }
+.info.text, .info.text a { font-size: 1em; }
+
+.onleft.iconset {
+	margin: 0px 8px 0px 0px;
+}
+
+/** SIZE modifiers */
+.bigicon {
+	font-size: 2em;
+	-webkit-transform: scale(1.5);
+	-moz-transform: scale(1.5);
+}
+
+.smallicon {
+	font-size: 0.9em;
+	-webkit-transform: scale(0.5);
+	-moz-transform: scale(0.5);
+}
+
+/** COLOR modifiers */
+.yellow {
+	color:#ffb515;
+	background-color: transparent;
+}
+
+.gray {
+	color:#CCCCCC;
+	background-color: transparent;
+}
+
+.lightgray {
+	color: #797979;
 }
