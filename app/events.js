@@ -1,23 +1,25 @@
 App.Events = (function(lng, app, undefined) {
 
 	lng.dom('section#login a').tap(function(event) {
-    	App.Services.initUser();
+		var email = lng.dom('#login input[name=email]').val();
+		var password = lng.dom('#login input[name=password]').val();
+		App.Services.signin(email,password);
+    	// App.Services.initUser();
 	});
 
-	lng.dom('a.mapbutton').tap(function(event) {
+	lng.dom('section#place-list a.mapbutton').tap(function(event) {
     	App.View.Map.renderPlaceListMap(App.Data.userLocation,App.Data.userPlaces);
 	});
 
+	lng.dom('section#friend-view a.mapbutton').tap(function(event) {
+		var slug = lng.dom(this).parent('section').attr('friend-slug');
+    	App.View.Map.renderPlaceListMap(App.Data.userLocation,App.Data.getFriendPlaces(slug),'friends');
+	});
+
 	lng.dom('.map.small.actionable').tap(function(event) {
-		console.error("tap on .map.small.actionable");
-		var place = lng.dom(this).siblings('.place.info').children().first();
-		console.error(place);
-		var id = place.attr('id').replace('place-','');
-		console.error(id);
+		var id = lng.dom(this).parent('section').attr('place-id');
     	App.View.Map.renderPlaceNavigationalMap(App.Data.getPlace(id));
-    	console.error('Routing to map');
     	lng.Router.section('map');
-    	console.error('tap ended');
 	});
 
 
@@ -50,44 +52,6 @@ App.Events = (function(lng, app, undefined) {
 		App.Services.loadFriendPlaces(slug);
 		App.View.createFriendPlacesView(App.Data.getFriend(slug));
 	})
-
-/**
-	var createPlacesTapEvents = function (container) {
-		var prefix = '';
-		if (container) { prefix = container + ' '; }
-		console.error('Create Places Tap Events');
-		lng.dom(prefix + 'li').tap(function(event) {
-			var place = lng.dom(this);
-			console.error(place);
-			var id = place.attr('id').replace('place-','');
-			App.Services.loadPlaceInformation(id);
-			App.View.createPlaceView(App.Data.getPlace(id));
-		})
-	};
-
-	var createLikeTapEvents = function (container) {
-		var prefix = '';
-		if (container) { prefix = container + ' '; }
-		lng.dom(prefix+'a.event.like').tap(function(event) {
-			var place = lng.dom(this).parent().parent();
-			console.error(place);
-			var id = place.attr('id').replace('place-','');
-			console.error("likes place "+id);
-		})
-	}
-**/
-/**
-	var createFriendsTapEvents = function () {
-		console.error('Create Places Tap Events');
-		lng.dom('section#friend-list li').tap(function(event) {
-			var friend = lng.dom(this);
-			console.error(friend);
-			App.Services.load
-			App.View.createPlaceView(place.attr('id'));
-			lng.Router.section("place-view");
-		})
-	};
-**/
 
     return {
     	/**

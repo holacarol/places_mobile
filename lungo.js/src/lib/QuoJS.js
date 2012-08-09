@@ -772,7 +772,7 @@ window.Quo = Quo;
     };
 
     function _xhrStatus(xhr, settings) {
-        if (xhr.status === 200 || xhr.status === 0) {
+        if (xhr.status === 200 || xhr.status === 201 || xhr.status === 0) {
             if (settings.async) {
                 var response = _parseResponse(xhr, settings);
                 _xhrSuccess(response, xhr, settings);

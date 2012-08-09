@@ -203,6 +203,8 @@ App.View = (function(lng, app, undefined) {
 	var createPlaceView = function (place) {
 		/** Change the title **/
 		lng.dom('section#place-view header span.title').html(place.title);
+		/** Identifying the place **/
+		lng.dom('section#place-view').attr('place-id',place.id);
 		/** Remove old comments */
 		lng.dom('.place.comments').html('');
 		/** Render the description template **/
@@ -277,6 +279,8 @@ App.View = (function(lng, app, undefined) {
 	{
 		/** Change the title of the page **/
 		lng.dom('section#friend-view header span.title').html('Places '+user.name+' likes');
+		/** Identify the friend slug (for the rest of the identification purposes) **/
+		lng.dom('section#friend-view').attr('friend-slug',user.slug);
 		/** Change view to the section 'place-view' **/
 		lng.Router.section('friend-view');
 	}

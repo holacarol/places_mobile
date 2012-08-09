@@ -1,9 +1,23 @@
 App.Services = (function(lng, app, undefined) {
 
-	/** Demonstration Server URL **/
+	/** Demonstration Server URL (@airecico) **/
     // var PLACES_API_URL = 'http://192.168.1.129:3000/';
+    /** Demonstration Server URL (@DIT) **/
+    // var PLACES_API_URL = 'http://lechuga.dit.upm.es:3000/';
     /** Local Server URL **/
-    var PLACES_API_URL = "server/";
+    var PLACES_API_URL = "/proxy/";
+
+    var signin = function (email, password) {
+    	var url = PLACES_API_URL + 'users/sign_in.json';
+    	var data = "user[email]="+email+"&user[password]="+password;
+    	// data = JSON.stringify(data);
+
+    	$$.post(url, data, function(response) {
+    		console.error(url);
+			console.error(response);
+			App.Services.initUser();
+		}, "application/json");
+    }
 
 	var initUser = function ()
 	{
@@ -16,7 +30,7 @@ App.Services = (function(lng, app, undefined) {
 	{
 		// var url = 'http://127.0.0.1:8000/myplaces/server/user.places.get.json';
 		var url = PLACES_API_URL + 'places.json';
-		var data = {callback : '?'};
+		var data = {};
 
 		$$.json(url, data, function(response) {
 			console.error(response);
@@ -44,6 +58,8 @@ App.Services = (function(lng, app, undefined) {
 			App.View.markPlacesListAsLiked(response.myplaces,'section#place-list');
 			App.View.markPlacesListAsLiked(response.friends,'section#place-list');
 			App.View.markPlacesListAsLiked(response.recommended,'section#place-list');
+
+			lng.Router.section('place-list');
 
 			// App.Events.createPlacesTapEvents('section#place-list article.list');
 			// App.Events.createLikeTapEvents('section#place-list article.list');
@@ -78,7 +94,7 @@ App.Services = (function(lng, app, undefined) {
 		var data = {callback : '?'};
 
 		$$.json(url, data, function(response) {
-			App.Data.setFriendsPlaces(response);
+			App.Data.setFriendPlaces(user_slug, response);
 
 			lng.View.Template.List.create({
 				el: "#friend-places-list",
@@ -172,6 +188,7 @@ App.Services = (function(lng, app, undefined) {
 
 
 	return {
+		signin : signin,
 		initUser : initUser, 
 		loadUserPlaces : loadUserPlaces,
 		loadUserFriends : loadUserFriends,
