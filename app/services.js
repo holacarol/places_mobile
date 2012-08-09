@@ -71,6 +71,28 @@ App.Services = (function(lng, app, undefined) {
 		});
 	};
 
+	var loadFriendPlaces = function (user_slug)
+	{
+		// var url = 'http://127.0.0.1:8000/myplaces/server/user.places.get.json';
+		var url = PLACES_API_URL + 'users/' + user_slug + '/places.json';
+		var data = {callback : '?'};
+
+		$$.json(url, data, function(response) {
+			App.Data.setFriendsPlaces(response);
+
+			lng.View.Template.List.create({
+				el: "#friend-places-list",
+				template: "place-in-list",
+				data: response
+			});
+
+			/** Mark if the place is liked or not **/
+			App.View.markPlacesListAsLiked(response,'#friend-places-list');
+
+		});
+	};
+
+
 	var loadPlaceInformation = function (place_id) 
 	{
 		var url = PLACES_API_URL + 'places/'+place_id+".json";
@@ -84,12 +106,16 @@ App.Services = (function(lng, app, undefined) {
 /**
 			App.View.createPlaceView(place);
 **/
-			lng.View.Template.render('section#place-view article#place-description .comments', 'comments-box', {});
-			lng.View.Template.List.create({
-				el: ".place.comments .list",
-				template: "comment",
-				data: comments
-			});
+			if ((comments != undefined) && (comments.length>0)) {
+				lng.View.Template.render('section#place-view article#place-description .comments', 'comments-box', {});
+				lng.View.Template.List.create({
+					el: ".place.comments .list",
+					template: "comment",
+					data: comments
+				});
+			} else {
+				lng.View.Template.render('section#place-view article#place-description .comments', 'no-comments', {});
+			}
 
 		});
 
@@ -151,6 +177,7 @@ App.Services = (function(lng, app, undefined) {
 		loadUserFriends : loadUserFriends,
 		requestUserLocation : requestUserLocation,
 		loadPlaceInformation : loadPlaceInformation,
+		loadFriendPlaces : loadFriendPlaces,
 		doLike : doLike,
 		undoLike : undoLike,
 	}

@@ -16,6 +16,10 @@ App.Data = (function(lng, app, undefined) {
 		_toCache(friends,'slug','friend_');
 	}
 
+	var setFriendsPlaces = function (places) {
+		_toCache(places,'id','place_');
+	}
+
 	var getPlaceFromCache = function (place_id) {
 		return lng.Data.Cache.get('place_'+place_id);
 	}
@@ -65,7 +69,9 @@ App.Data = (function(lng, app, undefined) {
 		userLocation : _userLocation,
 		setUserPlaces : setUserPlaces,
 		setUserFriends : setUserFriends,
-		getPlace : getPlaceFromCache
+		setFriendsPlaces : setFriendsPlaces,
+		getPlace : getPlaceFromCache,
+		getFriend : getFriendFromCache,
     }
 
 })(LUNGO, App);

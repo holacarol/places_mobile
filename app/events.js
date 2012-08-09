@@ -25,11 +25,11 @@ App.Events = (function(lng, app, undefined) {
     	App.Services.loadUserFriends();
 	});
 
-	lng.dom('#place-comments .switch').tap(function(event) {
-		App.View.switchComments('#place-comments');
+	lng.dom('.place.comments .switch').tap(function(event) {
+		App.View.switchComments('.place.comments');
 	});
 
-	lng.dom('section#place-list li').tap(function(event) {
+	lng.dom('li.place.selectable').tap(function(event) {
 		var place = lng.dom(this);
 		// console.error(place);
 		var id = place.attr('id').replace('place-','');
@@ -43,6 +43,13 @@ App.Events = (function(lng, app, undefined) {
 		var id = place.attr('id').replace('place-','');
 		// console.error("likes place "+id);
 	});
+
+	lng.dom('li.friend.selectable').tap(function(event) {
+		var friend = lng.dom(this);
+		var slug = friend.attr('id').replace('user-','');
+		App.Services.loadFriendPlaces(slug);
+		App.View.createFriendPlacesView(App.Data.getFriend(slug));
+	})
 
 /**
 	var createPlacesTapEvents = function (container) {

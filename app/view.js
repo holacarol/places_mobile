@@ -144,6 +144,15 @@ App.View = (function(lng, app, undefined) {
 		 </div>'
 	);
 
+	/**
+	 *  Template for comment box
+	 */
+	lng.View.Template.create('no-comments',
+		'<div class="info text indented">\
+			This place has no comments\
+		 </div>'
+	);
+
 	/** 
 	  *  Template for comments in a place 
 	  */
@@ -260,11 +269,24 @@ App.View = (function(lng, app, undefined) {
 		}
 	}
 
+	/**
+	 *  Function to create the list of places of a friend.
+	 *  parameter user the User Object of one of the friends.
+	 */
+	var createFriendPlacesView = function (user)
+	{
+		/** Change the title of the page **/
+		lng.dom('section#friend-view header span.title').html('Places '+user.name+' likes');
+		/** Change view to the section 'place-view' **/
+		lng.Router.section('friend-view');
+	}
+
     return{
     	createPlaceView : createPlaceView,
     	switchComments : switchComments,
     	markPlaceAsLiked : markPlaceAsLiked,
     	markPlacesListAsLiked : markPlacesListAsLiked,
+    	createFriendPlacesView : createFriendPlacesView,
     	Map : Map
     }
 
