@@ -281,6 +281,8 @@ App.View = (function(lng, app, undefined) {
 		lng.dom('section#friend-view header span.title').html('Places '+user.name+' likes');
 		/** Identify the friend slug (for the rest of the identification purposes) **/
 		lng.dom('section#friend-view').attr('friend-slug',user.slug);
+		/** Remove old information */
+		lng.dom('#friend-places-list').html('');
 		/** Change view to the section 'place-view' **/
 		lng.Router.section('friend-view');
 	}

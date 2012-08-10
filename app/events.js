@@ -35,22 +35,20 @@ App.Events = (function(lng, app, undefined) {
 		var place = lng.dom(this);
 		// console.error(place);
 		var id = place.attr('id').replace('place-','');
-		App.Services.loadPlaceInformation(id);
 		App.View.createPlaceView(App.Data.getPlace(id));
+		App.Services.loadPlaceInformation(id);
 	});
 
 	lng.dom('a.event.like').tap(function(event) {
 		var place = lng.dom(this).parent().parent();
-		// console.error(place);
 		var id = place.attr('id').replace('place-','');
-		// console.error("likes place "+id);
 	});
 
 	lng.dom('li.friend.selectable').tap(function(event) {
 		var friend = lng.dom(this);
 		var slug = friend.attr('id').replace('user-','');
-		App.Services.loadFriendPlaces(slug);
 		App.View.createFriendPlacesView(App.Data.getFriend(slug));
+		App.Services.loadFriendPlaces(slug);
 	})
 
     return {

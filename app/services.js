@@ -4,8 +4,12 @@ App.Services = (function(lng, app, undefined) {
     // var PLACES_API_URL = 'http://192.168.1.129:3000/';
     /** Demonstration Server URL (@DIT) **/
     // var PLACES_API_URL = 'http://lechuga.dit.upm.es:3000/';
-    /** Local Server URL **/
-    var PLACES_API_URL = "/proxy/";
+    /** Proxy Server URL for lechuga **/
+    var PLACES_API_URL = "/proxydit/";
+    /** Proxy Server URL for airecico **/
+    // var PLACES_API_URL = "/proxyair/";
+    /** On Rails Server URL **/
+    // var PLACES_API_URL = "/";
 
     var signin = function (email, password) {
     	var url = PLACES_API_URL + 'users/sign_in.json';
@@ -72,7 +76,7 @@ App.Services = (function(lng, app, undefined) {
 	{
 		// var url = 'http://127.0.0.1:8000/myplaces/server/user.places.get.json';
 		var url = PLACES_API_URL + 'contacts.json';
-		var data = {callback : '?'};
+		var data = {};
 
 		$$.json(url, data, function(response) {
 			console.error(response);
@@ -91,7 +95,7 @@ App.Services = (function(lng, app, undefined) {
 	{
 		// var url = 'http://127.0.0.1:8000/myplaces/server/user.places.get.json';
 		var url = PLACES_API_URL + 'users/' + user_slug + '/places.json';
-		var data = {callback : '?'};
+		var data = {};
 
 		$$.json(url, data, function(response) {
 			App.Data.setFriendPlaces(user_slug, response);
@@ -112,7 +116,7 @@ App.Services = (function(lng, app, undefined) {
 	var loadPlaceInformation = function (place_id) 
 	{
 		var url = PLACES_API_URL + 'places/'+place_id+".json";
-		var data = {callback : '?'};
+		var data = {};
 
 		$$.json(url, data, function(response) {
 			console.error(response);
@@ -137,7 +141,7 @@ App.Services = (function(lng, app, undefined) {
 
 	};
 
-	var doLike = function (place_id) 
+	var doLike = function (place_id)
 	{
 		var place = App.Data.getPlace(place_id);
 		var post_activity_id = place.post_activity_id;
@@ -149,17 +153,17 @@ App.Services = (function(lng, app, undefined) {
 		}, "application/json");
 	};
 
-	var undoLike = function (place_id) 
+	var undoLike = function (place_id)
 	{
 		var place = App.Data.getPlace(place_id);
 		var post_activity_id = place.post_activity_id;
 		var url = PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
-		var data = {_method : "delete"};
+		var data = "_method=delete";
 
 		$$.ajax({
 			type: "POST",
         	url: url,
-        	data: { _method : "delete"},
+        	data: data,
         	success: function(response) { console.error("unlike done"); },
         	dataType: "application/json",
         	contentType: "application/x-www-form-urlencoded"
@@ -174,7 +178,7 @@ App.Services = (function(lng, app, undefined) {
 			navigator.geolocation.getCurrentPosition(_setUserLocation, _setUserLocationError);
 		else
 			console.error("Localization not supported");
-	}
+	};
 
 	var _setUserLocation = function (position) 
 	{ 
