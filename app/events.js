@@ -31,17 +31,23 @@ App.Events = (function(lng, app, undefined) {
 		App.View.switchComments('.place.comments');
 	});
 
-	lng.dom('li.place.selectable').tap(function(event) {
-		var place = lng.dom(this);
-		// console.error(place);
+	lng.dom('li.place.selectable .selectable').tap(function(event) {
+		var place = lng.dom(this).parent('li.place');
 		var id = place.attr('id').replace('place-','');
 		App.View.createPlaceView(App.Data.getPlace(id));
 		App.Services.loadPlaceInformation(id);
 	});
 
 	lng.dom('a.event.like').tap(function(event) {
+		/** We identify if it's like or undo like depending on the color class */
+		var is_like_action = lng.dom(this).children('.icon.star').hasClass('gray');
 		var place = lng.dom(this).parent().parent();
 		var id = place.attr('id').replace('place-','');
+		if (is_like_action) {
+			App.Services.doLike(id);
+		} else {
+			App.Services.undoLike(id);
+		}
 	});
 
 	lng.dom('li.friend.selectable').tap(function(event) {

@@ -28,6 +28,10 @@ App.Data = (function(lng, app, undefined) {
 		return lng.Data.Cache.get('place-'+place_id);
 	}
 
+	var putPlaceInCache = function (place) {
+		lng.Data.Cache.set('place-'+place.id,place);
+	}
+
 	var getFriendFromCache = function (friend_slug) {
 		return lng.Data.Cache.get('friend-'+friend_slug);
 	}
@@ -38,35 +42,6 @@ App.Data = (function(lng, app, undefined) {
 		}
 	}
 
-	/**
-	lng.Data.Sql.init({
-	    name: 'places.mobile',
-	    version: '0.5',
-	    schema: [
-	        {
-	            name: 'myplaces',
-	            drop: true,
-	            fields: {
-	              id: 'INTEGER PRIMARY KEY',
-	              name: 'TEXT',
-	              description: 'TEXT',
-	              type: 'STRING',
-	              done: 'INTEGER DEFAULT 0',
-	              created_at: 'DATETIME'
-	            }
-	        },
-	        {
-	            name: 'cache',
-	            drop: false,
-	            fields: {
-	                id: 'INTEGER PRIMARY KEY',
-	                name: 'TEXT'
-	            }
-	        }
-	    ]
-	});
-	**/
-
     return {
 		userPlaces : _userPlaces,
 		userFriends : _userFriends,
@@ -76,6 +51,7 @@ App.Data = (function(lng, app, undefined) {
 		setFriendPlaces : setFriendPlaces,
 		getFriendPlaces : getFriendPlaces,
 		getPlace : getPlaceFromCache,
+		putPlace : putPlaceInCache,
 		getFriend : getFriendFromCache,
     }
 

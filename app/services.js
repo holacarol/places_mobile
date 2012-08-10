@@ -167,7 +167,11 @@ App.Services = (function(lng, app, undefined) {
 		var data = {};
 
 		$$.post(url, data, function(response) {
-			console.error("like done");
+			/** Change place like in cache **/
+			console.error(place);
+			place.is_liked = true;
+			App.Data.putPlace(place);
+			App.View.markPlaceAsLiked(place.id,true);
 		}, "application/json");
 	};
 
@@ -178,7 +182,12 @@ App.Services = (function(lng, app, undefined) {
 		var url = PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
 		var data = "_method=delete";
 
-		$$.post(url, data, function(response) { console.error("unlike done"); }, "application/json");	
+		$$.post(url, data, function(response) { 
+			console.error(place);
+			place.is_liked = false;
+			App.Data.putPlace(place);
+			App.View.markPlaceAsLiked(place.id,false);
+		}, "application/json");	
 	};
 
 	var requestUserLocation = function ()

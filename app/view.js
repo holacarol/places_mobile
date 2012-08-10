@@ -112,10 +112,12 @@ App.View = (function(lng, app, undefined) {
 	  */
 	lng.View.Template.create('place-in-list',
 		'<li id="place-{{id}}" class="place selectable" data-icon="pushpin">\
-			<div class="onleft icon pushpin"></div>\
 			<div class="onright"><a href="#" class="event like"><span class="icon star gray bigicon"></span></a></div>\
-			<div><strong>{{title}}</strong>\
-				<small>{{address.locality}}. {{address.country}}</small>\
+			<div class="selectable">\
+				<div class="onleft icon pushpin"></div>\
+				<div><strong>{{title}}</strong>\
+					<small>{{address.locality}}. {{address.country}}</small>\
+				</div>\
 			</div>\
 		 </li>'
 	);
@@ -274,7 +276,7 @@ App.View = (function(lng, app, undefined) {
 		var prefix = '';
 		if (container) { prefix = container + ' '; }
 		// console.error(prefix+'li#place-'+place_id+' span.icon.star');
-		var star = lng.dom(prefix+'li#place-'+place_id+' span.icon.star');
+		var star = lng.dom(prefix+'#place-'+place_id+' .icon.star');
 		if (like) {
 			star.removeClass('gray').addClass('yellow');
 		} else {
