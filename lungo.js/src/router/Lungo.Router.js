@@ -24,13 +24,12 @@ LUNGO.Router = (function(lng, undefined) {
      */
     var section = function(section_id) {
         var section_id = lng.Core.parseUrl(section_id);
-        var current = _getHistoryCurrent();
+        var current = ELEMENT.SECTION + _getHistoryCurrent();
         var target = ELEMENT.SECTION + section_id;
 
-        if (_existsTarget(target)) {
+        if (_existsTarget(target) && (target!=current)) {
             lng.dom(current).removeClass(CLASS.HIDE_REVOKE).removeClass(CLASS.SHOW).addClass(CLASS.HIDE);
-            lng.dom(target).removeClass(CLASS.SHOW_REVOKE).addClass(CLASS.SHOW).trigger(TRIGGER.LOAD);
-
+            lng.dom(target).removeClass(CLASS.SHOW_REVOKE).addClass(CLASS.SHOW).removeClass(CLASS.HIDE).trigger(TRIGGER.LOAD);
             lng.Router.History.add(section_id);
         }
     };
@@ -82,12 +81,23 @@ LUNGO.Router = (function(lng, undefined) {
      *
      * @method back
      */
-    var back = function() {
+    var back = function(target) {
+        if (target != undefined) {
+            target = lng.Core.parseUrl(target);
+            if (target == _getHistoryCurrent()) {
+                return;
+            }
+        }
+
         var current_section = ELEMENT.SECTION + _getHistoryCurrent();
 
         lng.dom(current_section).removeClass(CLASS.SHOW).addClass(CLASS.SHOW_REVOKE).trigger(TRIGGER.UNLOAD);
         lng.Router.History.removeLast();
         lng.dom(_getHistoryCurrent()).removeClass(CLASS.HIDE).addClass(CLASS.HIDE_REVOKE).addClass(CLASS.SHOW);
+
+        if (target != undefined) {
+            back(target);
+        }
     };
 
     var _existsTarget = function(target) {

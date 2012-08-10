@@ -196,6 +196,17 @@ App.View = (function(lng, app, undefined) {
 		</div>'
 	);
 
+	var requestLogin = function (message) {
+		/** Show the login form **/
+		lng.dom('#login div.form').show();
+		/** Redirect to login view **/
+		lng.Router.back('login');
+		/** Display error message if adequate **/
+		if (message != undefined) {
+			// do something
+		}
+	}
+
 	/**
 	 *  Function to create the place view to render in the 'place-view' section of the app.
 	 *  parameter place the Place Object as returned as JSON from the server or retrieved from Cache
@@ -282,12 +293,13 @@ App.View = (function(lng, app, undefined) {
 		/** Identify the friend slug (for the rest of the identification purposes) **/
 		lng.dom('section#friend-view').attr('friend-slug',user.slug);
 		/** Remove old information */
-		lng.dom('#friend-places-list').html('');
+		lng.dom('#friend-places-list ul').html('');
 		/** Change view to the section 'place-view' **/
 		lng.Router.section('friend-view');
 	}
 
     return{
+    	requestLogin : requestLogin,
     	createPlaceView : createPlaceView,
     	switchComments : switchComments,
     	markPlaceAsLiked : markPlaceAsLiked,

@@ -11,16 +11,34 @@ App.Services = (function(lng, app, undefined) {
     /** On Rails Server URL **/
     // var PLACES_API_URL = "/";
 
+    var _initAjaxSettings = function ()
+    {
+    	$$.ajaxSettings.error = _genericAjaxError;
+    }
+
     var signin = function (email, password) {
     	var url = PLACES_API_URL + 'users/sign_in.json';
     	var data = "user[email]="+email+"&user[password]="+password;
     	// data = JSON.stringify(data);
 
-    	$$.post(url, data, function(response) {
+    	$$.post(url, data, function(response, xhr) {
     		console.error(url);
 			console.error(response);
 			App.Services.initUser();
 		}, "application/json");
+    }
+
+    var signout = function () {
+    	var url = PLACES_API_URL + 'users/sign_out.json';
+    	var data = "_method=DELETE";
+
+    	$$.post(url, 
+    			data, 
+    			function(response, xhr) { 
+    				console.error(xhr);
+    				App.View.requestLogin();
+    			},
+    			"application/json");	
     }
 
 	var initUser = function ()
@@ -160,15 +178,7 @@ App.Services = (function(lng, app, undefined) {
 		var url = PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
 		var data = "_method=delete";
 
-		$$.ajax({
-			type: "POST",
-        	url: url,
-        	data: data,
-        	success: function(response) { console.error("unlike done"); },
-        	dataType: "application/json",
-        	contentType: "application/x-www-form-urlencoded"
-        	// headers: {'X_METHODOVERRIDE': 'DELETE'}
-        });	
+		$$.post(url, data, function(response) { console.error("unlike done"); }, "application/json");	
 	};
 
 	var requestUserLocation = function ()
@@ -190,9 +200,20 @@ App.Services = (function(lng, app, undefined) {
 		console.error(error);
 	} 
 
+	var _genericAjaxError = function (message, xhr) {
+		if (xhr.status == 401) {
+			App.View.requestLogin();
+		}
+	}
+
+	/** Initialization **/
+	_initAjaxSettings();
+	initUser();
+
 
 	return {
 		signin : signin,
+		signout : signout,
 		initUser : initUser, 
 		loadUserPlaces : loadUserPlaces,
 		loadUserFriends : loadUserFriends,
