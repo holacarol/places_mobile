@@ -1,52 +1,52 @@
 App.Services = (function(lng, app, undefined) {
 
 	/** Demonstration Server URL (@airecico) **/
-    // var PLACES_API_URL = 'http://192.168.1.129:3000/';
-    /** Demonstration Server URL (@DIT) **/
-    // var PLACES_API_URL = 'http://lechuga.dit.upm.es:3000/';
-    /** Proxy Server URL for lechuga **/
-    var PLACES_API_URL = "/proxydit/";
-    /** Proxy Server URL for airecico **/
-    // var PLACES_API_URL = "/proxyair/";
-    /** On Rails Server URL **/
-    // var PLACES_API_URL = "/";
+	// var PLACES_API_URL = 'http://192.168.1.129:3000/';
+	/** Demonstration Server URL (@DIT) **/
+	// var PLACES_API_URL = 'http://lechuga.dit.upm.es:3000/';
+	/** Proxy Server URL for lechuga **/
+	var PLACES_API_URL = "/proxydit/";
+	/** Proxy Server URL for airecico **/
+	// var PLACES_API_URL = "/proxyair/";
+	/** On Rails Server URL **/
+	// var PLACES_API_URL = "/";
 
-    var _initAjaxSettings = function ()
-    {
-    	$$.ajaxSettings.error = _genericAjaxError;
-    }
+	var _initAjaxSettings = function ()
+	{
+		$$.ajaxSettings.error = _genericAjaxError;
+	};
 
-    var signin = function (email, password) {
-    	var url = PLACES_API_URL + 'users/sign_in.json';
-    	var data = "user[email]="+email+"&user[password]="+password;
-    	// data = JSON.stringify(data);
+	var signin = function (email, password) {
+		var url = PLACES_API_URL + 'users/sign_in.json';
+		var data = "user[email]="+email+"&user[password]="+password;
+		// data = JSON.stringify(data);
 
-    	$$.post(url, data, function(response, xhr) {
-    		console.error(url);
+		$$.post(url, data, function(response, xhr) {
+			console.error(url);
 			console.error(response);
 			App.Services.initUser();
 		}, "application/json");
-    }
+	};
 
-    var signout = function () {
-    	var url = PLACES_API_URL + 'users/sign_out.json';
-    	var data = "_method=DELETE";
+	var signout = function () {
+		var url = PLACES_API_URL + 'users/sign_out.json';
+		var data = "_method=DELETE";
 
-    	$$.post(url, 
-    			data, 
-    			function(response, xhr) { 
-    				console.error(xhr);
-    				App.View.requestLogin();
-    			},
-    			"application/json");	
-    }
+		$$.post(url,
+				data,
+				function(response, xhr) {
+					console.error(xhr);
+					App.View.requestLogin();
+				},
+				"application/json");
+	};
 
 	var initUser = function ()
 	{
 		loadUserPlaces();
 		requestUserLocation();
 
-	}
+	};
 
 	var loadUserPlaces = function ()
 	{
@@ -83,16 +83,11 @@ App.Services = (function(lng, app, undefined) {
 
 			lng.Router.section('place-list');
 
-			// App.Events.createPlacesTapEvents('section#place-list article.list');
-			// App.Events.createLikeTapEvents('section#place-list article.list');
-			// App.Events.createLikeTapEvents();
-
 		});
 	};
 
 	var loadUserFriends = function ()
 	{
-		// var url = 'http://127.0.0.1:8000/myplaces/server/user.places.get.json';
 		var url = PLACES_API_URL + 'contacts.json';
 		var data = {};
 
@@ -111,7 +106,6 @@ App.Services = (function(lng, app, undefined) {
 
 	var loadFriendPlaces = function (user_slug)
 	{
-		// var url = 'http://127.0.0.1:8000/myplaces/server/user.places.get.json';
 		var url = PLACES_API_URL + 'users/' + user_slug + '/places.json';
 		var data = {};
 
@@ -131,7 +125,7 @@ App.Services = (function(lng, app, undefined) {
 	};
 
 
-	var loadPlaceInformation = function (place_id) 
+	var loadPlaceInformation = function (place_id)
 	{
 		var url = PLACES_API_URL + 'places/'+place_id+".json";
 		var data = {};
@@ -141,10 +135,7 @@ App.Services = (function(lng, app, undefined) {
 
 			var place = response.place;
 			var comments = response.comments;
-/**
-			App.View.createPlaceView(place);
-**/
-			if ((comments != undefined) && (comments.length>0)) {
+			if ((comments !== undefined) && (comments.length>0)) {
 				lng.View.Template.render('section#place-view article#place-description .comments', 'comments-box', {});
 				lng.View.Template.List.create({
 					el: ".place.comments .list",
@@ -171,23 +162,25 @@ App.Services = (function(lng, app, undefined) {
 			console.error(place);
 			place.is_liked = true;
 			App.Data.putPlace(place);
+			/** We add the place first to then change the star **/
+			App.View.addPlaceToList(place);
 			App.View.markPlaceAsLiked(place.id,true);
 		}, "application/json");
 	};
 
-	var undoLike = function (place_id)
+	var doDislike = function (place_id)
 	{
 		var place = App.Data.getPlace(place_id);
 		var post_activity_id = place.post_activity_id;
 		var url = PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
 		var data = "_method=delete";
 
-		$$.post(url, data, function(response) { 
+		$$.post(url, data, function(response) {
 			console.error(place);
 			place.is_liked = false;
 			App.Data.putPlace(place);
 			App.View.markPlaceAsLiked(place.id,false);
-		}, "application/json");	
+		}, "application/json");
 	};
 
 	var requestUserLocation = function ()
@@ -199,21 +192,21 @@ App.Services = (function(lng, app, undefined) {
 			console.error("Localization not supported");
 	};
 
-	var _setUserLocation = function (position) 
-	{ 
+	var _setUserLocation = function (position)
+	{
 		App.Data.userLocation = { latitude : position.coords.latitude, longitude : position.coords.longitude};
-	}
+	};
 
-	var _setUserLocationError = function (error) 
+	var _setUserLocationError = function (error)
 	{
 		console.error(error);
-	} 
+	};
 
 	var _genericAjaxError = function (message, xhr) {
 		if (xhr.status == 401) {
 			App.View.requestLogin();
 		}
-	}
+	};
 
 	/** Initialization **/
 	_initAjaxSettings();
@@ -223,14 +216,14 @@ App.Services = (function(lng, app, undefined) {
 	return {
 		signin : signin,
 		signout : signout,
-		initUser : initUser, 
+		initUser : initUser,
 		loadUserPlaces : loadUserPlaces,
 		loadUserFriends : loadUserFriends,
 		requestUserLocation : requestUserLocation,
 		loadPlaceInformation : loadPlaceInformation,
 		loadFriendPlaces : loadFriendPlaces,
 		doLike : doLike,
-		undoLike : undoLike,
-	}
+		doDislike : doDislike
+	};
 
 })(LUNGO, App);

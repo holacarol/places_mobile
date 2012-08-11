@@ -1,4 +1,5 @@
 .floatbar {
+	background: #000;
 	background: rgba(0, 0, 0, 0.9);
 }
 
@@ -6,7 +7,7 @@
 	width: 100%;
 }
 
-img.thumbnail {
+.thumbnail {
 	width: 20px;
 	height: 20px;
 }
@@ -37,20 +38,20 @@ img.thumbnail {
 	color: #888;
 }
 
-a.switch {
+.switch {
 	color: #05B8E2;
 }
 
 .right-aligned {
 	text-align: right;
-	margin: 8px 11px 0px 11px;
+	margin: 8px 11px 0 11px;
 }
 
 .info.text, .info.text a, .info.text .icon { color: #797979; text-shadow: 0px 1px 0px #fff; }
 .info.text, .info.text a { font-size: 1em; }
 
 .onleft.iconset {
-	margin: 0px 8px 0px 0px;
+	margin: 0 8px 0 0;
 }
 
 /** SIZE modifiers */
@@ -58,12 +59,18 @@ a.switch {
 	font-size: 2em;
 	-webkit-transform: scale(1.5);
 	-moz-transform: scale(1.5);
+	-o-transform: scale(1.5);
+	-ms-transform: scale(1.5);
+	transform: scale(1.5);
 }
 
 .smallicon {
 	font-size: 0.9em;
 	-webkit-transform: scale(0.5);
 	-moz-transform: scale(0.5);
+	-o-transform: scale(0.5);
+	-ms-transform: scale(0.5);
+	transform: scale(0.5);
 }
 
 /** COLOR modifiers */
@@ -79,4 +86,16 @@ a.switch {
 
 .lightgray {
 	color: #797979;
+}
+
+.recommended.color {
+	color: #fe8800;
+}
+
+.friends.color {
+	color: #518259;
+}
+
+.user.color {
+	color: #1f4a75;
 }

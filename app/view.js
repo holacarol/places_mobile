@@ -5,111 +5,102 @@ App.View = (function(lng, app, undefined) {
 
 		var DEFAULT_MARKER = "user";
 
-		var markers = 
+		var markers =
 		{
-            user: {
-                url: 'assets/images/mapmarker22x32.png',
-                size: {x: 22, y: 37},
-                anchor: {x: 11, y: 37}
-            },
-            friends: {
-                url: 'assets/images/greenmarker22x32.png',
-                size: {x: 22, y: 37},
-                anchor: {x: 11, y: 37}
-            },
-            recommended: {
-                url: 'assets/images/orangemarker22x32.png',
-                size: {x: 22, y: 37},
-                anchor: {x: 11, y: 37}
-            }
-        };
+			user: {
+				url: 'assets/images/mapmarker22x32.png',
+				size: {x: 22, y: 37},
+				anchor: {x: 11, y: 37}
+			},
+			friends: {
+				url: 'assets/images/greenmarker22x32.png',
+				size: {x: 22, y: 37},
+				anchor: {x: 11, y: 37}
+			},
+			recommended: {
+				url: 'assets/images/orangemarker22x32.png',
+				size: {x: 22, y: 37},
+				anchor: {x: 11, y: 37}
+			}
+		};
 
-	    var renderPlaceListMap = function(center, places, type)
+		var renderPlaceListMap = function(center, places, type)
 		{
 			lng.Sugar.GMap.init({
-			        el: '#map-fullview',
-			        zoom: 14,
-			        //type: 'HYBRID',
-			        center: center,
-			        overviewMapControl: true
+					el: '#map-fullview',
+					zoom: 14,
+					//type: 'HYBRID',
+					center: center,
+					overviewMapControl: true
 			});
 
-		    if (lng.Core.toType(places) == 'object') {
+			if (lng.Core.toType(places) == 'object') {
 				_placeMarkers(places.myplaces,"user");
 				_placeMarkers(places.friends,"friends");
 				_placeMarkers(places.recommended,"recommended");
-		    }
+			}
 
 			if (lng.Core.toType(places) == 'array') {
 				_placeMarkers(places,type);
 			}
-		}
+		};
 
-	    var renderPlaceNavigationalMap = function(place) {
-	    	lng.Sugar.GMap.init({
-	    			el: '#map-fullview',
-	    			zoom: 14,
-	    			center: place,
-	    			overviewMapControl: true
-	    	});
-	    	_placeMarker(place,'user');
-	    }
+		var renderPlaceNavigationalMap = function(place) {
+			lng.Sugar.GMap.init({
+					el: '#map-fullview',
+					zoom: 14,
+					center: place,
+					overviewMapControl: true
+			});
+			_placeMarker(place,'user');
+		};
 
 		var renderPlaceMap = function(place)
 		{
 			lng.Sugar.GMap.init({
-		            el: '#map-placeview',
-		            zoom: 14,
-		            minZoom: 14,
-		            maxZoom: 14,
-		            //type: 'HYBRID',
-		            center: place,
-		            draggable: false,
-		            disableDoubleClickZoom: true,
-
-		    });
+					el: '#map-placeview',
+					zoom: 14,
+					minZoom: 14,
+					maxZoom: 14,
+					//type: 'HYBRID',
+					center: place,
+					draggable: false,
+					disableDoubleClickZoom: true
+			});
 			_placeMarker(place,"user");
-		}
+		};
 
 		var _placeMarkers = function (places, marker) {
-		    for (var i=0; i<places.length; i++) {
+			for (var i=0; i<places.length; i++) {
 				place = places[i];
 				_placeMarker(place,marker);
-				/*
-				lng.Sugar.GMap.addMarker(
-					{ latitude : place.latitude,
-					  longitude : place.longitude },
-					marker,
-					false
-				);
-				*/
-			};
-		}
+			}
+		};
 
-		var _placeMarker = function (place, marker) 
+		var _placeMarker = function (place, marker)
 		{
 			lng.Sugar.GMap.addMarker(place,_getMarker(marker),false);
-		}
+		};
 
-		var _getMarker = function (type) 
+		var _getMarker = function (type)
 		{
-			type = (type==undefined)?"user":type;
-			marker = (markers[type]!=undefined)?markers[type]:markers[DEFAULT_MARKER];
+			type = (type===undefined)?"user":type;
+			marker = (markers[type]!==undefined)?markers[type]:markers[DEFAULT_MARKER];
 			return marker;
-		}
+		};
 
 		return{
 			renderPlaceListMap : renderPlaceListMap,
 			renderPlaceMap : renderPlaceMap,
-			renderPlaceNavigationalMap : renderPlaceNavigationalMap,
-		}
+			renderPlaceNavigationalMap : renderPlaceNavigationalMap
+		};
 
 	})(LUNGO, App);
 
 	/** TEMPLATES **/
-	/** 
-	  *  Template for Places in the list 
-	  */
+	/**
+		Template for Places in the list
+	**/
 	lng.View.Template.create('place-in-list',
 		'<li id="place-{{id}}" class="place selectable" data-icon="pushpin">\
 			<div class="onright"><a href="#" class="event like"><span class="icon star gray bigicon"></span></a></div>\
@@ -142,7 +133,7 @@ App.View = (function(lng, app, undefined) {
 			<a href="#" class="link switch friends">See only friends comments</a>\
 		 </div>\
 		 <div id="list" class="list comments indented">\
-		 	<ul></ul>\
+			<ul></ul>\
 		 </div>'
 	);
 
@@ -166,10 +157,10 @@ App.View = (function(lng, app, undefined) {
 		 </li>'
 	);
 
-	/** 
-	  *  Template for description of a place 
-	  */
-	lng.View.Template.create('place-description',
+	/**
+	*  Template for description of a place
+	*/
+	 lng.View.Template.create('place-description',
 		'<div id="place-{{id}}" class="place">\
 			<div class="onright"><a class="event like">href="#"><span class="icon star yellow bigicon"></span></a></div>\
 			<div>\
@@ -179,7 +170,6 @@ App.View = (function(lng, app, undefined) {
 						<p>\
 						{{address.streetAddress}}<br>\
 						{{address.postalCode}}, {{address.locality}}. {{address.country}}\
-						<p>\
 					</div>\
 				</div>\
 				<div class="contact info text">\
@@ -300,14 +290,34 @@ App.View = (function(lng, app, undefined) {
 		lng.Router.section('friend-view');
 	}
 
-    return{
-    	requestLogin : requestLogin,
-    	createPlaceView : createPlaceView,
-    	switchComments : switchComments,
-    	markPlaceAsLiked : markPlaceAsLiked,
-    	markPlacesListAsLiked : markPlacesListAsLiked,
-    	createFriendPlacesView : createFriendPlacesView,
-    	Map : Map
-    }
+	var addPlaceToList = function (place, list) {
+		/** Set the list possibilities **/
+		if (list !== undefined && (list == 'friends' || list == 'recommended')) { 
+			list = '#list-'+list;
+		} else {
+			list = '#list-mine';
+		}
+
+		var exists = (lng.dom(list+' #place-'+place.id).length>0);
+		/** If it doesnt exist we append the new element**/
+		if (!exists) {
+			lng.View.Template.List.append({
+				el: list,
+				template: "place-in-list",
+				data: [place]
+			});
+		}
+	}
+
+	return{
+		requestLogin : requestLogin,
+		createPlaceView : createPlaceView,
+		switchComments : switchComments,
+		markPlaceAsLiked : markPlaceAsLiked,
+		markPlacesListAsLiked : markPlacesListAsLiked,
+		createFriendPlacesView : createFriendPlacesView,
+		addPlaceToList : addPlaceToList,
+		Map : Map
+	}
 
 })(LUNGO, App);
