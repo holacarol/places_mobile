@@ -153,13 +153,27 @@ LUNGO.Core = (function(lng, $$, undefined) {
         var order_operator = (order === 'desc') ? -1 : 1;
 
         return data.sort(function(a, b) {
-            return (a[property] < b[property]) ? - order_operator :
-                (a[property] > b[property])
+            var a_value = _getProperty(a,property);
+            var b_value = _getProperty(b,property);
+            return (a_value < b_value) ? - order_operator :
+                (a_value > b_value)
                 ?
                 order_operator : 0;
             }
         );
     };
+
+    var _getProperty = function (element, property) {
+        var tree = property;
+        if (toType(property) == 'string') {
+            tree = property.split('.');
+        }        
+        if (tree.length == 1) {
+            return (element[tree.shift()]);
+        } else {
+            return _getProperty(element[tree.shift()],tree);
+        }
+    }
 
     /**
      * Returns a correct URL using hashtag character

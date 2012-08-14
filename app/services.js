@@ -11,6 +11,11 @@ App.Services = (function(lng, app, undefined) {
 	/** On Rails Server URL **/
 	// var PLACES_API_URL = "/";
 
+	var GOOGLE_API_URL = "/google/";
+
+	var GOOGLE_API_KEY = "AIzaSyCGRJar96a3klge7MihfjEWYUAbgkoNKI4";
+
+
 	var _initAjaxSettings = function ()
 	{
 		$$.ajaxSettings.error = _genericAjaxError;
@@ -36,7 +41,7 @@ App.Services = (function(lng, app, undefined) {
 				data,
 				function(response, xhr) {
 					console.error(xhr);
-					App.View.requestLogin();
+					app.View.requestLogin();
 				},
 				"application/json");
 	};
@@ -50,7 +55,6 @@ App.Services = (function(lng, app, undefined) {
 
 	var loadUserPlaces = function ()
 	{
-		// var url = 'http://127.0.0.1:8000/myplaces/server/user.places.get.json';
 		var url = PLACES_API_URL + 'places.json';
 		var data = {};
 
@@ -84,6 +88,58 @@ App.Services = (function(lng, app, undefined) {
 			lng.Router.section('place-list');
 
 		});
+	};
+
+	var loadNearbyPlaces = function ()
+	{
+		App.Services.RequestSynchronizer.init('nearby_places',2,_gatherPlaces);
+		var callbackFunction = App.Services.RequestSynchronizer.callback('nearby_places');
+		_loadNearbyPlacesFromServer(callbackFunction);
+		_loadNearbyGooglePlaces(callbackFunction);
+	};
+
+	var _loadNearbyPlacesFromServer = function (callback)
+	{
+		var url = PLACES_API_URL + 'places/nearby.json';
+		var data = { lat: App.Data.userLocation.latitude, lng : App.Data.userLocation.longitude };
+		$$.json(url, data, callback);
+	};
+
+	var _loadNearbyGooglePlaces = function (callback)
+	{
+		var request = {
+			location : new google.maps.LatLng(App.Data.userLocation.latitude,App.Data.userLocation.longitude),
+			rankBy: google.maps.places.RankBy.DISTANCE,
+			types: ["establishment","point_of_interest"]
+		};
+
+		var places_service = new google.maps.places.PlacesService($$('#google-places-search')[0]);
+		places_service.search(request, callback);
+	};
+
+	var _gatherPlaces = function (response)
+	{
+		console.error(response);
+		var places_array = [];
+		for (var ia = 0; ia < response.length; ia++) {
+			for (var ip = 0; ip < response[ia].length; ip++) {
+				places_array.push(new App.Data.Place(response[ia][ip]));
+			}
+		}
+		console.error(places_array);
+
+		lng.View.Template.List.create({
+			el: "#place-search #search-results",
+			template: "place-nearby-in-list",
+			data: places_array,
+			order: {
+				field: 'distance.amount',
+				type: 'asc'
+			}
+		});
+
+		new iScroll('search-results');
+
 	};
 
 	var loadUserFriends = function ()
@@ -208,6 +264,63 @@ App.Services = (function(lng, app, undefined) {
 		}
 	};
 
+	/** REQUEST SYNCHRONIZER UTILITY **/
+	var RequestSynchronizer = (function(lng,app,undefined) {
+
+		var _ongoing = [];
+
+		var init = function (request_id,count,callback,mix)
+		{
+			_ongoing[request_id] = {
+				id : request_id,
+				count : count,
+				callback : callback,
+				response : [],
+				mix : (mix!==undefined)?true:false
+			};
+		};
+
+		var destroy = function (request_id)
+		{
+			_ongoing[request_id] = undefined;
+		};
+
+		var getCallback = function (request_id)
+		{
+			var synchronizer = _ongoing[request_id];
+			if (_ongoing[request_id] !== undefined){
+				return function (response) {
+					if (synchronizer.mix) {
+						/** TODO: mix response with existing one **/
+					} else {
+						synchronizer.response.push(response);
+					}
+					if (synchronizer.response.length == synchronizer.count) {
+						synchronizer.callback(synchronizer.response);
+						RequestSynchronizer.destroy(synchronizer.id);
+					}
+				};
+			} else {
+				return function (response) {
+					console.error(response);
+				};
+			}
+		};
+
+		var getSynchronizer = function (request_id)
+		{
+			return _ongoing[request_id];
+		}
+
+		return {
+			init : init,
+			destroy : destroy,
+			callback : getCallback,
+			synchronizer : getSynchronizer
+		};
+	})(LUNGO,App);
+
+
 	/** Initialization **/
 	_initAjaxSettings();
 	initUser();
@@ -218,12 +331,15 @@ App.Services = (function(lng, app, undefined) {
 		signout : signout,
 		initUser : initUser,
 		loadUserPlaces : loadUserPlaces,
+		loadNearbyPlaces : loadNearbyPlaces,
+		loadGooglePlaces : _loadNearbyGooglePlaces,
 		loadUserFriends : loadUserFriends,
 		requestUserLocation : requestUserLocation,
 		loadPlaceInformation : loadPlaceInformation,
 		loadFriendPlaces : loadFriendPlaces,
 		doLike : doLike,
-		doDislike : doDislike
+		doDislike : doDislike,
+		RequestSynchronizer : RequestSynchronizer
 	};
 
 })(LUNGO, App);

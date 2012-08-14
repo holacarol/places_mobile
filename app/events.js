@@ -55,6 +55,27 @@ App.Events = (function(lng, app, undefined) {
 		App.Services.loadFriendPlaces(slug);
 	});
 
+	/**
+		Element: Search Box @ Place Search
+		Event: keyup
+		Action: Filter list if more than 5 characters in the field
+	*/
+	lng.dom('#place-search input[type=search]').on('keyup',function (event) {
+		var search_query = lng.dom(this).val();
+		if (search_query.length > 4) {
+			console.error("Searching for"+search_query);
+		}
+	});
+
+	/**
+		Element: Search for a Place button
+		Event: tap
+		Action: load nearby places
+	*/
+	lng.dom('a[href="#place-search"]').tap(function(event){
+		App.Services.loadNearbyPlaces();
+	});
+	
 	return {
 	};
 
