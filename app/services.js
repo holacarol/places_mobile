@@ -128,6 +128,8 @@ App.Services = (function(lng, app, undefined) {
 		}
 		console.error(places_array);
 
+		lng.View.Scroll.init('search-results');
+
 		lng.View.Template.List.create({
 			el: "#place-search #search-results",
 			template: "place-nearby-in-list",
@@ -136,9 +138,7 @@ App.Services = (function(lng, app, undefined) {
 				field: 'distance.amount',
 				type: 'asc'
 			}
-		});
-
-		new iScroll('search-results');
+		});''
 
 	};
 

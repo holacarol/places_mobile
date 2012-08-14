@@ -59,6 +59,10 @@
 	border-bottom: 1px solid #E1E1E1;
 }
 
+div.list {
+	height: 100%;
+}
+
 /** SIZE modifiers */
 .bigicon {
 	font-size: 2em;
