@@ -34,18 +34,47 @@ App.Data = (function(lng, app, undefined) {
 					streetAddress : _original.vicinity
 				};
 				if (_hasDetails()) {
-					/** TODO: Check how the server is doing it **/
-					address.country = _original.address_components[5];
+					for (var i = 0; i < _original.address_components.length; i++ ) {
+						var component = _original.address_components[i].types[0];
+						var component_value = _original.address_components[i].long_name;
+						if (component == "postal_code") {
+							address.postalCode = component_value;
+						} else if (component == "locality") {
+							address.locality = component_value;
+						} else if (component == "administrative_area_level_1" || component == "administrative_area_level_2") {
+							address.region = component_value;
+						}
+					}
+
+					address.country = _parseCountry(_original.formatted_address);
 					address.formatted = _original.formatted_address;
-					address.locality = _original.address_components[2];
-					address.postalCode = _original.address_components[6];
-					address.region = _original.address_components[3];
-					address.streetAddress = _original.address_components[1] + ", " + _original.address_components[0];
+					address.streetAddress = _parseStreetAddress(_original.formatted_address,address.locality,address.postalCode);
 				}
 				return address;
 			} else {
 				return _original.address;
 			}
+		};
+
+		var _parseCountry = function (formatted_address) {
+		    var lastComma = formatted_address.lastIndexOf(", ");
+		    if (lastComma == -1) {
+		    	lastComma = -2;
+		    }
+		    return formatted_address.substring(lastComma + 2);
+		};
+
+		var _parseStreetAddress = function (formatted_address,locality,postalcode)
+		{
+			var city = formatted_address.lastIndexOf(locality);
+			var postal = formatted_address.lastIndexOf(postalcode);
+			var cutindex;
+			if (postal == -1 || city < postal) {
+				cutindex = city;
+			} else {
+				cutindex = postal;
+			}
+			return formatted_address.substring(0, cutindex - 2);
 		};
 
 		var _getDistance = function ()
@@ -199,6 +228,8 @@ App.Data = (function(lng, app, undefined) {
 		var title = _getTitle();
 		var url = _getURL();
 		var reference = _getGoogleReference();
+		var origin = (_isGoogle())?"google":"myplaces";
+		var has_details = _hasDetails();
 
 		return {
 			address : address,
@@ -211,7 +242,9 @@ App.Data = (function(lng, app, undefined) {
 			post_activity_id : post_activity_id,
 			title : title,
 			url : url,
-			reference : reference
+			reference : reference,
+			origin : origin,
+			has_details : has_details
 		};
 	};
 
@@ -247,6 +280,10 @@ App.Data = (function(lng, app, undefined) {
 		lng.Data.Cache.set('place-'+place.id,place);
 	};
 
+	var putPlacesInCache = function (places_array) {
+		_toCache(places_array,'id','place-');
+	}
+
 	var getFriendFromCache = function (friend_slug) {
 		return lng.Data.Cache.get('friend-'+friend_slug);
 	};
@@ -257,7 +294,7 @@ App.Data = (function(lng, app, undefined) {
 		}
 	};
 
-    return {
+	return {
 		userPlaces : _userPlaces,
 		userFriends : _userFriends,
 		userLocation : _userLocation,
@@ -267,8 +304,9 @@ App.Data = (function(lng, app, undefined) {
 		getFriendPlaces : getFriendPlaces,
 		getPlace : getPlaceFromCache,
 		putPlace : putPlaceInCache,
+		putPlaces : putPlacesInCache,
 		getFriend : getFriendFromCache,
 		Place : Place
-    };
+	};
 
 })(LUNGO, App);

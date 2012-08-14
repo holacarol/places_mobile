@@ -126,7 +126,7 @@ App.View = (function(lng, app, undefined) {
 	  *  Template for Places in nearby list (where the distance appears) 
 	  */
 	lng.View.Template.create('place-nearby-in-list',
-		'<li id="place-{{id}}" class="place selectable" data-icon="pushpin">\
+		'<li id="place-{{id}}" class="place selectable origin-{{origin}}" data-icon="pushpin">\
 			<div class="selectable">\
 				<div class="onleft icon pushpin"></div>\
 				<div><strong>{{title}}</strong>\
@@ -320,6 +320,24 @@ App.View = (function(lng, app, undefined) {
 		lng.Router.section('friend-view');
 	}
 
+	var addPlaceToList = function (place, list) {
+		/** Set the list possibilities **/
+		if (list !== undefined && (list == 'friends' || list == 'recommended')) { 
+			list = '#list-'+list;
+		} else {
+			list = '#list-mine';
+		}
+		var exists = (lng.dom(list+' #place-'+place.id).length>0);
+		/** If it doesnt exist we append the new element**/
+		if (!exists) {
+			lng.View.Template.List.append({
+				el: list,
+				template: "place-in-list",
+				data: [place]
+			});
+		}
+	}
+
 	/** INITIALIZATION **/
 	_initView();
 
@@ -330,6 +348,7 @@ App.View = (function(lng, app, undefined) {
 		markPlaceAsLiked : markPlaceAsLiked,
 		markPlacesListAsLiked : markPlacesListAsLiked,
 		createFriendPlacesView : createFriendPlacesView,
+		addPlaceToList : addPlaceToList,
 		Map : Map
 	}
 

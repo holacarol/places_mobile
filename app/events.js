@@ -29,11 +29,17 @@ App.Events = (function(lng, app, undefined) {
 		App.View.switchComments('.place.comments');
 	});
 
-	lng.dom('li.place.selectable .selectable').tap(function(event) {
+	lng.dom('li.place.selectable:not(.origin-google) .selectable').tap(function(event) {
 		var place = lng.dom(this).parent('li.place');
 		var id = place.attr('id').replace('place-','');
 		App.View.createPlaceView(App.Data.getPlace(id));
 		App.Services.loadPlaceInformation(id);
+	});
+
+	lng.dom('li.place.selectable.origin-google').tap(function(event) {
+		var place = lng.dom(this);
+		var id = place.attr('id').replace('place-','');
+		App.Services.loadGooglePlaceInformation(id);
 	});
 
 	lng.dom('a.event.like').tap(function(event) {

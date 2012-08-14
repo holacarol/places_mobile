@@ -128,6 +128,8 @@ App.Services = (function(lng, app, undefined) {
 		}
 		console.error(places_array);
 
+		App.Data.putPlaces(places_array);
+
 		lng.View.Scroll.init('search-results');
 
 		lng.View.Template.List.create({
@@ -203,25 +205,51 @@ App.Services = (function(lng, app, undefined) {
 			}
 
 		});
+	};
 
+	var loadGooglePlaceInformation = function (place_id)
+	{
+
+		var place = App.Data.getPlace(place_id);
+
+		if (place.has_details) {
+			App.View.createPlaceView(place);
+		} else {
+			var request = {
+				reference : place.reference
+			};
+
+			var places_service = new google.maps.places.PlacesService($$('#google-places-search')[0]);
+			places_service.getDetails(request, function(response) {
+				console.error(response);
+				var place = new App.Data.Place(response);
+				App.Data.putPlace(place);
+				App.View.createPlaceView(place);
+			});
+		}
 	};
 
 	var doLike = function (place_id)
 	{
 		var place = App.Data.getPlace(place_id);
 		var post_activity_id = place.post_activity_id;
-		var url = PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
-		var data = {};
 
-		$$.post(url, data, function(response) {
-			/** Change place like in cache **/
-			console.error(place);
-			place.is_liked = true;
-			App.Data.putPlace(place);
-			/** We add the place first to then change the star **/
-			App.View.addPlaceToList(place);
-			App.View.markPlaceAsLiked(place.id,true);
-		}, "application/json");
+		if (post_activity_id < 0 && place.origin == 'google') {
+			doCreateAndLike(place);
+		} else {
+			var url = PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
+			var data = {};
+
+			$$.post(url, data, function(response) {
+				/** Change place like in cache **/
+				console.error(place);
+				place.is_liked = true;
+				App.Data.putPlace(place);
+				/** We add the place first to then change the star **/
+				App.View.addPlaceToList(place);
+				App.View.markPlaceAsLiked(place.id,true);
+			}, "json");
+		}
 	};
 
 	var doDislike = function (place_id)
@@ -236,8 +264,49 @@ App.Services = (function(lng, app, undefined) {
 			place.is_liked = false;
 			App.Data.putPlace(place);
 			App.View.markPlaceAsLiked(place.id,false);
-		}, "application/json");
+		}, "json");
 	};
+
+	var doCreateAndLike = function(place)
+	{
+		var url = PLACES_API_URL + "places.json";
+		var data = {
+			place : {
+				address_attributes : place.address,
+				title : place.title,
+				latitude : place.latitude,
+				longitude : place.longitude,
+				phone_number : place.phone_number,
+				url : place.url
+			}
+		};
+
+		console.error(url);
+        $$.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(data),
+            success: _newPlace,
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+	};
+
+	var _newPlace = function (response) {
+		console.error(response);
+		console.error(response.success);
+		console.error(response.place);
+		if (response.success) {
+			var new_place = response.place;
+			console.error(new_place);
+			App.Data.putPlace(new_place);
+			/** We make the view again with the final data of the place **/
+			App.View.createPlaceView(new_place);
+			/** We add the place first to then change the star **/
+			App.View.addPlaceToList(new_place);
+			App.View.markPlaceAsLiked(new_place.id,true);
+		}
+	}
 
 	var requestUserLocation = function ()
 	{
@@ -336,9 +405,11 @@ App.Services = (function(lng, app, undefined) {
 		loadUserFriends : loadUserFriends,
 		requestUserLocation : requestUserLocation,
 		loadPlaceInformation : loadPlaceInformation,
+		loadGooglePlaceInformation : loadGooglePlaceInformation,
 		loadFriendPlaces : loadFriendPlaces,
 		doLike : doLike,
 		doDislike : doDislike,
+		doCreateAndLike : doCreateAndLike,
 		RequestSynchronizer : RequestSynchronizer
 	};
 
