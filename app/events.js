@@ -123,9 +123,11 @@ App.Events = (function(lng, app, undefined) {
 				console.error("Searching for "+search_query);
 				App.Services.searchPlaces(search_query);
 			},{ timeout : 1000 });
+			lng.dom(this).addClass('blue');
 		} else {
 			EventSynchronizer.destroy('search-query');
 			App.View.switchFromTo('#place-search #search-results','#place-search #nearby-results');
+			lng.dom(this).addClass('red');
 		}
 	});
 
@@ -137,6 +139,33 @@ App.Events = (function(lng, app, undefined) {
 	lng.dom('a[href="#place-search"]').tap(function(event){
 		App.Services.loadNearbyPlaces();
 	});
+
+	/**
+		Element: Textarea for comments
+		Event: keyup
+		Action: Change number of rows automatically
+
+		We need to create it as function, as keyboard events in LUNGO are not automatically added to non existing elements.
+	*/
+	var addTextAreaKeyboardEvent = function (textarea) {
+		lng.dom(textarea).on('keypress',function (event) {
+			var element = lng.dom(this);
+			/* Removing 10 px because of the existing padding (5 + 5) */
+			element[0].style.height = (element[0].scrollHeight -10) + 'px';
+			/* If the key pressed is the Enter */
+			if (event.which == 13) {
+				/* Disabling it to avoid future changes */
+				element[0].disabled = true;
+				/* Detecting the post_activity_id */
+				var id = lng.dom(this).parent('section').attr('place-id');
+				var post_activity_id = App.Data.getPlace(id).post_activity_id;
+				/* Adding the comment (server request) */
+				App.Services.addComment(post_activity_id, element.val());
+				/* Returning false to avoid the Enter Character */
+				return false;
+			}
+		});
+	}
 
 	/**
 	 *
@@ -206,6 +235,7 @@ App.Events = (function(lng, app, undefined) {
 	})(LUNGO,App);
 	
 	return {
+		addTextAreaKeyboardEvent : addTextAreaKeyboardEvent,
 		EventSynchronizer : EventSynchronizer
 	};
 

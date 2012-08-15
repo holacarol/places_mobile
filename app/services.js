@@ -5,9 +5,9 @@ App.Services = (function(lng, app, undefined) {
 	/** Demonstration Server URL (@DIT) **/
 	// var PLACES_API_URL = 'http://lechuga.dit.upm.es:3000/';
 	/** Proxy Server URL for lechuga **/
-	var PLACES_API_URL = "/proxydit/";
+	// var PLACES_API_URL = "/proxydit/";
 	/** Proxy Server URL for airecico **/
-	// var PLACES_API_URL = "/proxyair/";
+	var PLACES_API_URL = "/proxyair/";
 	/** On Rails Server URL **/
 	// var PLACES_API_URL = "/";
 
@@ -291,14 +291,15 @@ App.Services = (function(lng, app, undefined) {
 			var place = response.place;
 			var comments = response.comments;
 			if ((comments !== undefined) && (comments.length>0)) {
-				lng.View.Template.render('section#place-view article#place-description .comments', 'comments-box', {});
-				lng.View.Template.List.create({
+				App.View.switchFromTo(".place.comments .message.loading",".place.comments .switch.friends");
+				lng.View.Template.List.append({
 					el: ".place.comments .list",
 					template: "comment",
 					data: comments
 				});
+				LUNGO.View.Scroll.init('place-description');
 			} else {
-				lng.View.Template.render('section#place-view article#place-description .comments', 'no-comments', {});
+				App.View.switchFromTo(".place.comments .message.loading",".place.comments .message.none");
 			}
 
 		});
@@ -389,6 +390,37 @@ App.Services = (function(lng, app, undefined) {
         });
 	};
 
+	var addComment = function (post_activity_id, comment)
+	{
+		console.error(post_activity_id);
+		console.error(comment);
+		var url = PLACES_API_URL + "comments.json";
+		var data = {
+			comment : {
+				_activity_parent_id : post_activity_id,
+				text : comment
+			}
+		};
+
+		console.error(url);
+        $$.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(data),
+            success: function (response) {
+				App.View.clearTextArea(".place.comments .add.comment");
+				lng.View.Template.List.append({
+					el: ".place.comments .list",
+					template: "comment",
+					data: response.comment
+				});
+				LUNGO.View.Scroll.init('place-description');
+            },
+            dataType: 'json',
+            contentType: 'application/json'
+        });		
+	};
+
 	var _newPlace = function (response) {
 		console.error(response);
 		console.error(response.success);
@@ -399,6 +431,8 @@ App.Services = (function(lng, app, undefined) {
 			App.Data.putPlace(new_place);
 			/** We make the view again with the final data of the place **/
 			App.View.createPlaceView(new_place);
+			/** A new place doesnt have any comments */
+			App.View.switchFromTo(".place.comments .message.loading",".place.comments .message.none");
 			/** We add the place first to then change the star **/
 			App.View.addPlaceToList(new_place);
 			App.View.markPlaceAsLiked(new_place.id,true);
@@ -537,6 +571,7 @@ App.Services = (function(lng, app, undefined) {
 		doLike : doLike,
 		doDislike : doDislike,
 		doCreateAndLike : doCreateAndLike,
+		addComment : addComment,
 		RequestSynchronizer : RequestSynchronizer
 	};
 

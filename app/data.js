@@ -237,6 +237,7 @@ App.Data = (function(lng, app, undefined) {
 		var reference = _getGoogleReference();
 		var origin = (_isGoogle())?"google":"myplaces";
 		var has_details = _hasDetails();
+		var comments_disabled = (_isGoogle())?true:false;
 
 		return {
 			address : address,
@@ -252,7 +253,8 @@ App.Data = (function(lng, app, undefined) {
 			reference : reference,
 			origin : origin,
 			equals : equals,
-			has_details : has_details
+			has_details : has_details,
+			comments_disabled : comments_disabled
 		};
 	};
 

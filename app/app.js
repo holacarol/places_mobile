@@ -10,7 +10,6 @@ var App = (function(lng, undefined) {
 				'place.view.html',
 				'map.html',
 				'place.search.html',
-				'place.new.html',
 				'friend.list.html',
 				'friend.view.html']
 		}

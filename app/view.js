@@ -153,20 +153,17 @@ App.View = (function(lng, app, undefined) {
 	 */
 	lng.View.Template.create('comments-box',
 		'<div class="right-aligned">\
-			<a href="#" class="link switch friends">See only friends comments</a>\
-		 </div>\
-		 <div id="list" class="list comments indented">\
-			<ul></ul>\
-		 </div>'
-	);
-
-	/**
-	 *  Template for comment box
-	 */
-	lng.View.Template.create('no-comments',
-		'<div class="info text indented">\
-			This place has no comments\
-		 </div>'
+				<span class="message loading">Loading comments...</span>\
+				<span class="message none hidden">This place has no comments</span>\
+				<a href="#" class="link switch friends hidden">See only friends comments</a>\
+			</div>\
+			<div id="list" class="list comments indented">\
+				<ul>\
+					<li class="comment add">\
+						<textarea placeholder="Type your comment" class="textarea"></textarea>\
+					</li>\
+				</ul>\
+			 </div>'
 	);
 
 	/** 
@@ -238,8 +235,16 @@ App.View = (function(lng, app, undefined) {
 		lng.dom('section#place-view header span.title').html(place.title);
 		/** Identifying the place **/
 		lng.dom('section#place-view').attr('place-id',place.id);
-		/** Remove old comments */
-		lng.dom('.place.comments').html('');
+		/** Comments capacities */
+		if (place.comments_disabled) {
+			/** Clean the comments area from previous places */
+			lng.dom('section#place-view article#place-description .comments').html('');
+		} else {
+			/** Remove old comments and reset view */
+			lng.View.Template.render('section#place-view article#place-description .comments', 'comments-box', {});
+			/** Add the events to the text area */
+			App.Events.addTextAreaKeyboardEvent('section#place-view article#place-description .comments textarea');
+		}
 		/** Render the description template **/
 		lng.View.Template.render('section#place-view article#place-description .info', 'place-description', place);
 		/** Render the small map for the place **/
@@ -277,6 +282,15 @@ App.View = (function(lng, app, undefined) {
 	{
 		lng.dom(view_from).hide();
 		lng.dom(view_to).show();
+	};
+
+	/**
+	 *  To clear a comments text area, basically it renders it again.
+	 *  TOCHANGE: It's a little bit dirty to do it directly without template.
+	 */
+	var clearTextArea = function (container)
+	{
+		lng.dom(container).html('<textarea placeholder="Type your comment" class="textarea"></textarea>');
 	};
 
 	/**
@@ -355,6 +369,7 @@ App.View = (function(lng, app, undefined) {
 		createPlaceView : createPlaceView,
 		switchComments : switchComments,
 		switchFromTo : switchFromTo,
+		clearTextArea : clearTextArea,
 		markPlaceAsLiked : markPlaceAsLiked,
 		markPlacesListAsLiked : markPlacesListAsLiked,
 		createFriendPlacesView : createFriendPlacesView,

@@ -408,7 +408,9 @@ window.Quo = Quo;
                 if (value) {
                     var div = document.createElement();
                     div.innerHTML = value;
-                    this.appendChild(div.firstChild);
+                    while (div.hasChildNodes()) {
+                        this.appendChild(div.firstChild);
+                    }
                 }
             } else {
                 this.insertBefore(value);

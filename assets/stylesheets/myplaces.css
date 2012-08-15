@@ -63,6 +63,11 @@ div.list {
 	height: 100%;
 }
 
+.comments .textarea {
+	height: 20px;
+	resize: vertical;
+}
+
 /** SIZE modifiers */
 .bigicon {
 	font-size: 2em;
@@ -95,6 +100,16 @@ div.list {
 
 .lightgray {
 	color: #797979;
+}
+
+.red {
+	color: #EA2E49;
+	background-color: transparent;
+}
+
+.blue {
+	color: #77C4D3;
+	background-color: transparent;
 }
 
 .recommended.color {
