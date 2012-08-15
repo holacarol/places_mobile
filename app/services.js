@@ -90,9 +90,20 @@ App.Services = (function(lng, app, undefined) {
 		});
 	};
 
+
+	/**
+	 *  LOADING NEARBY PLACES #search-place section
+	 *  Consists of 4 main methods:
+	 *  - loadNearbyPlaces: the main one
+	 *  - _loadNearbyPlacesFromServer: private, only for server ones
+	 *  - _loadNearbyGooglePlaces: private, only for Google ones
+	 *  - _gatherPlaces: callback function to gather places from both queries.
+	 */
 	var loadNearbyPlaces = function ()
 	{
-		App.Services.RequestSynchronizer.init('nearby_places',2,_gatherPlaces);
+		App.Services.RequestSynchronizer.init('nearby_places',2, function (response) {
+			_showNearByResults(_combinePlaces(response));
+		});
 		var callbackFunction = App.Services.RequestSynchronizer.callback('nearby_places');
 		_loadNearbyPlacesFromServer(callbackFunction);
 		_loadNearbyGooglePlaces(callbackFunction);
@@ -117,23 +128,50 @@ App.Services = (function(lng, app, undefined) {
 		places_service.search(request, callback);
 	};
 
-	var _gatherPlaces = function (response)
+	var _combinePlaces = function (response)
 	{
 		console.error(response);
 		var places_array = [];
+		var indexes = [];
+		var place_i = {};
+		var place_o = {};
 		for (var ia = 0; ia < response.length; ia++) {
 			for (var ip = 0; ip < response[ia].length; ip++) {
-				places_array.push(new App.Data.Place(response[ia][ip]));
+				place_i = new App.Data.Place(response[ia][ip]);
+				var do_push = true;
+				if (indexes[place_i.title] !== undefined) {
+					for (var ii = 0; ii < indexes[place_i.title].length; ii ++){
+						place_o = places_array[indexes[place_i.title][ii]];
+						if (place_i.equals(place_o)) {
+							/* Substitute in the array only if it's preferred duplicate */
+							if (place_o.origin == 'google' && place_i.origin == 'myplaces') {
+								places_array[indexes[place_i.title][ii]] = place_i;
+							} 
+							/* Do not do push to avoid duplicates */
+							do_push = false;
+						} 						
+					}
+				}
+				/* Put in the array if it's not a duplicate */
+				if (do_push) {
+					places_array.push(place_i);
+					/* and include the index in the indexes table */
+					if (indexes[place_i.title]===undefined) {
+						indexes[place_i.title]=[];
+					}
+					indexes[place_i.title].push(places_array.length-1);
+				}
 			}
 		}
+		return places_array;		
+	};
+
+	var _showNearByResults = function (places_array)
+	{
 		console.error(places_array);
-
 		App.Data.putPlaces(places_array);
-
-		lng.View.Scroll.init('search-results');
-
 		lng.View.Template.List.create({
-			el: "#place-search #search-results",
+			el: "#place-search #nearby-results",
 			template: "place-nearby-in-list",
 			data: places_array,
 			order: {
@@ -141,7 +179,66 @@ App.Services = (function(lng, app, undefined) {
 				type: 'asc'
 			}
 		});''
+		App.View.switchFromTo('#place-search #search-results','#place-search #nearby-results');
+		lng.View.Scroll.init('nearby-results');
+	};
 
+	/**
+	 *  SEARCHING PLACES #search-place section
+	 *  Consists of 4 main methods:
+	 *  - searchPlaces: the main one
+	 *  - _searchPlacesFromServer: private, only for server ones
+	 *  - _searchGooglePlaces: private, only for Google ones
+	 *  - _gatherPlaces: callback function to gather places from both queries.
+	 */
+
+	var searchPlaces = function (query)
+	{
+		App.Services.RequestSynchronizer.init('search_places',2, function (response) {
+			_showSearchResults(_combinePlaces(response));
+		},{onthefly:true});
+		var callbackFunction = App.Services.RequestSynchronizer.callback('search_places');
+		_searchPlacesFromServer(query,callbackFunction);
+		_searchGooglePlaces(query,callbackFunction);
+	};
+
+	var _searchPlacesFromServer = function (query, callback)
+	{
+		var url = PLACES_API_URL + 'search.json';
+		var data = { q : query, mode : 'place_search' };
+
+		console.error(url + "query=" + query);
+		$$.json(url, data, callback);
+	};
+
+	var _searchGooglePlaces = function (query, callback)
+	{
+		var request = {
+			query : query,
+			location : new google.maps.LatLng(App.Data.userLocation.latitude,App.Data.userLocation.longitude),
+			radius : 10000
+		};
+
+		var places_service = new google.maps.places.PlacesService($$('#google-places-search')[0]);
+		places_service.textSearch(request, callback);
+	};
+
+	var _showSearchResults = function (places_array)
+	{
+		console.error(places_array);
+
+		App.Data.putPlaces(places_array);
+		lng.View.Template.List.create({
+			el: "#place-search #search-results",
+			template: "place-nearby-in-list",
+			data: places_array
+			// order: {
+			// 	field: 'distance.amount',
+			// 	type: 'asc'
+			// }
+		});''
+		App.View.switchFromTo('#place-search #nearby-results','#place-search #search-results');
+		lng.View.Scroll.init('search-results');
 	};
 
 	var loadUserFriends = function ()
@@ -333,25 +430,51 @@ App.Services = (function(lng, app, undefined) {
 		}
 	};
 
-	/** REQUEST SYNCHRONIZER UTILITY **/
+	/**
+	 *
+	 *  REQUEST SYNCHRONIZER UTILITY 
+	 *
+	 *  Utility that helps to synchronize various AJAX requests based on an id.
+	 *  If more than one request should call the same callback function, the Synchronizer helps to
+	 *  gather the temporal results before calling the final callback function.
+	 *
+	 *
+	 **/
 	var RequestSynchronizer = (function(lng,app,undefined) {
 
 		var _ongoing = [];
 
-		var init = function (request_id,count,callback,mix)
+		/** Default configuration for the Synchronizer object **/
+		var DEFAULT_CONFIG = {
+			mix : false,
+			onthefly : false
+		};
+
+		var init = function (request_id,count,callback,config)
 		{
+			// Destroy previous requests with the same id
+			destroy(request_id);
+			// Build configuration object
+			config = $$.mix(DEFAULT_CONFIG,config);
+			// Build request synchronizer
 			_ongoing[request_id] = {
 				id : request_id,
 				count : count,
 				callback : callback,
 				response : [],
-				mix : (mix!==undefined)?true:false
+				mix : config.mix,
+				onthefly : config.onthefly,
+				enabled : true,
 			};
 		};
 
 		var destroy = function (request_id)
 		{
-			_ongoing[request_id] = undefined;
+			var synchronizer = getSynchronizer(request_id);
+			if (synchronizer != undefined) {
+				synchronizer.enabled = false;
+				_ongoing[request_id] = undefined;
+			}
 		};
 
 		var getCallback = function (request_id)
@@ -359,14 +482,18 @@ App.Services = (function(lng, app, undefined) {
 			var synchronizer = _ongoing[request_id];
 			if (_ongoing[request_id] !== undefined){
 				return function (response) {
-					if (synchronizer.mix) {
-						/** TODO: mix response with existing one **/
-					} else {
-						synchronizer.response.push(response);
-					}
-					if (synchronizer.response.length == synchronizer.count) {
-						synchronizer.callback(synchronizer.response);
-						RequestSynchronizer.destroy(synchronizer.id);
+					if (synchronizer.enabled) {
+						if (synchronizer.mix) {
+							/** TODO: mix response with existing one **/
+						} else {
+							synchronizer.response.push(response);
+						}
+						if (synchronizer.response.length == synchronizer.count) {
+							synchronizer.callback(synchronizer.response);
+							RequestSynchronizer.destroy(synchronizer.id);
+						} else if (synchronizer.onthefly) {
+							synchronizer.callback(synchronizer.response);
+						}
 					}
 				};
 			} else {
@@ -401,7 +528,7 @@ App.Services = (function(lng, app, undefined) {
 		initUser : initUser,
 		loadUserPlaces : loadUserPlaces,
 		loadNearbyPlaces : loadNearbyPlaces,
-		loadGooglePlaces : _loadNearbyGooglePlaces,
+		searchPlaces : searchPlaces,
 		loadUserFriends : loadUserFriends,
 		requestUserLocation : requestUserLocation,
 		loadPlaceInformation : loadPlaceInformation,

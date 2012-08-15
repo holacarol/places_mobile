@@ -27,11 +27,11 @@ App.Data = (function(lng, app, undefined) {
 			if (_isGoogle()) {
 				var address = {
 					country : "",
-					formatted : _original.vicinity,
+					formatted : (_original.vicinity!==undefined)?_original.vicinity:_original.formatted_address,
 					locality : "",
 					postalCode : "",
 					region : "",
-					streetAddress : _original.vicinity
+					streetAddress : (_original.vicinity!==undefined)?_original.vicinity:_original.formatted_address
 				};
 				if (_hasDetails()) {
 					for (var i = 0; i < _original.address_components.length; i++ ) {
@@ -217,6 +217,13 @@ App.Data = (function(lng, app, undefined) {
 			return false;
 		};
 
+		var equals = function (place) {
+			return ((title == place.title) && 
+					(	(address.streetAddress.indexOf(place.address.streetAddress)>=0) ||
+						(place.address.streetAddress.indexOf(address.streetAddress)>=0)
+					));
+		};
+
 		var address = _getAddress();
 		var id = _getId();
 		var distance = _getDistance();
@@ -244,6 +251,7 @@ App.Data = (function(lng, app, undefined) {
 			url : url,
 			reference : reference,
 			origin : origin,
+			equals : equals,
 			has_details : has_details
 		};
 	};

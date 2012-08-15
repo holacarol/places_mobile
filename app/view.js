@@ -248,7 +248,7 @@ App.View = (function(lng, app, undefined) {
 		markPlaceAsLiked(place.id,place.is_liked,'section#place-view div.info');
 		/** Change view to the section 'place-view' **/
 		lng.Router.section('place-view');
-	}
+	};
 
 	/**
 	 *  Function to switch the view of comments from 'friends' to 'all'
@@ -268,7 +268,16 @@ App.View = (function(lng, app, undefined) {
 			switcher.removeClass('all').addClass('friends');
 			switcher.html('See only friends comments');
 		}
-	}
+	};
+
+	/**
+	 *  Function to switch from one view to another inside the same article
+	 */
+	var switchFromTo = function (view_from, view_to)
+	{
+		lng.dom(view_from).hide();
+		lng.dom(view_to).show();
+	};
 
 	/**
 	 *  Function to mark the "i like" stars of an array of places.
@@ -345,6 +354,7 @@ App.View = (function(lng, app, undefined) {
 		requestLogin : requestLogin,
 		createPlaceView : createPlaceView,
 		switchComments : switchComments,
+		switchFromTo : switchFromTo,
 		markPlaceAsLiked : markPlaceAsLiked,
 		markPlacesListAsLiked : markPlacesListAsLiked,
 		createFriendPlacesView : createFriendPlacesView,
