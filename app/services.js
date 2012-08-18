@@ -7,9 +7,9 @@ App.Services = (function(lng, app, undefined) {
 	/** Demonstration Server URL (@DIT) **/
 	// var PLACES_API_URL = 'http://lechuga.dit.upm.es:3000/';
 	/** Proxy Server URL for lechuga **/
-	// var PLACES_API_URL = "/proxydit/";
+	var PLACES_API_URL = "/proxydit/";
 	/** Proxy Server URL for airecico **/
-	var PLACES_API_URL = "/proxyair/";
+	// var PLACES_API_URL = "/proxyair/";
 	/** On Rails Server URL **/
 	// var PLACES_API_URL = "/";
 
@@ -22,6 +22,14 @@ App.Services = (function(lng, app, undefined) {
 	{
 		$$.ajaxSettings.error = _genericAjaxError;
 	};
+
+	/**
+	 *  INITIALIZATION and LOGIN
+	 *  We are going to provide functionalities to:
+	 *  - signin: login the user
+	 *  - signout: log out the user (not mapped to a UI event)
+	 *  - initUser: to initialize the user automatically if there's previous cookie.
+	 */
 
 	var signin = function (email, password) {
 		var url = PLACES_API_URL + 'users/sign_in.json';
@@ -54,6 +62,11 @@ App.Services = (function(lng, app, undefined) {
 		requestUserLocation();
 
 	};
+
+	/**
+	 *  LOADING USER PLACES
+	 *
+	 */
 
 	var loadUserPlaces = function ()
 	{
@@ -198,7 +211,7 @@ App.Services = (function(lng, app, undefined) {
 	{
 		App.Services.RequestSynchronizer.init('search_places',2, function (response) {
 			_showSearchResults(_combinePlaces(response));
-		},{onthefly:true});
+		},{onthefly:false});
 		var callbackFunction = App.Services.RequestSynchronizer.callback('search_places');
 		_searchPlacesFromServer(query,callbackFunction);
 		_searchGooglePlaces(query,callbackFunction);
@@ -242,6 +255,14 @@ App.Services = (function(lng, app, undefined) {
 		App.View.switchFromTo('#place-search #nearby-results','#place-search #search-results');
 		lng.View.Scroll.init('search-results');
 	};
+
+	/**
+	 *  LOADING USER FRIENDS.
+	 *  Consists mainly in two methods
+	 *  - loadUserFriends : to get the friend list
+	 *  - loadFriendPlaces : to get the places of a friend.
+	 *
+	 */
 
 	var loadUserFriends = function ()
 	{
