@@ -1,26 +1,5 @@
 App.Services = (function(lng, app, undefined) {
 
-<<<<<<< HEAD
-=======
-	// Holacarol is here
-
-	/** Demonstration Server URL (@airecico) **/
-	// var PLACES_API_URL = 'http://192.168.1.129:3000/';
-	/** Demonstration Server URL (@DIT) **/
-	// var PLACES_API_URL = 'http://lechuga.dit.upm.es:3000/';
-	/** Proxy Server URL for lechuga **/
-	var PLACES_API_URL = "/proxydit/";
-	/** Proxy Server URL for airecico **/
-	// var PLACES_API_URL = "/proxyair/";
-	/** On Rails Server URL **/
-	// var PLACES_API_URL = "/";
-
-	var GOOGLE_API_URL = "/google/";
-
-	var GOOGLE_API_KEY = "AIzaSyCGRJar96a3klge7MihfjEWYUAbgkoNKI4";
-
-
->>>>>>> c3ebc5be127e0aa416b1eac927527a6de4d056e0
 	var _initAjaxSettings = function ()
 	{
 		$$.ajaxSettings.error = _genericAjaxError;

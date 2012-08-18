@@ -7,3 +7,5 @@
 # And then also the server directory where we just put the fake data
 server/*
 
+# Ignoring config.js
+app/config.js
