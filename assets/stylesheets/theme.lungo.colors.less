@@ -1,0 +1,36 @@
+/**
+ * Lungo Theme Colours (for LESS)
+ *
+ * @namespace LUNGO.Theme.Colors
+ * @class Default
+ *
+ * @author Óscar-Miguel Solá (oscarmsola) based on Javier Jimenez Villar <javi@tapquo.com> || @soyjavi
+ */
+
+/**
+ * Colour definitions working with a main pallete of five colours
+ * - main : strong colour to identify the application
+ * - highlight : for highlighting elements
+ * - base : for lists, backgrounds
+ * - text : for main texts
+ * - contrast : a contrast colour for the main;
+ */
+@color-main : #05b8e2; // Main color of the application/brand (splash, header, etc)
+@color-main-darker : darken(@color-main,6%);
+@color-main-lighter : lighten(@color-main,6%);
+@color-highlight : #34b7dc; // Highlight contrast color
+@color-highlight-lighter : lighten(@color-highlight,25%);
+@color-base : #FFFFFF; // Colour for base elements (lists, info)
+@color-above-base : #ededed; // Colour for elements above above the base (like groupbars)
+@color-background : #e1e1e1; // Colour for background (articles, application)
+@color-layout : #2c2c2d; // Colour that frames the content (as a footer or aside)
+@color-dark : #2c2c2d; // Dark Scale : 0;
+@color-mid-dark : #4b4b4b; // Dark Scale : 1;
+@color-mid : #7C7C7C; // Dark Scale: 2;
+@color-mid-light : #c7c7c7; // Dark Scale : 3;
+@color-base-border : @color-background; // Color for borders
+
+@text-highlight : #FFFFFF; // Colour for texts over color-main or color-highlight
+@text-color : #2A2A2A; // Colour for texts over color-base
+@text-soft : #888888; // Softened colour for texts over color-base
+@text-above-base : #7A7A7A; // Colour for texts over @color-above-base

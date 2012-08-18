@@ -4,24 +4,6 @@ App.Data = (function(lng, app, undefined) {
 
 		var _original = place;
 
-		// address: Object
-		// 	.country: "French Southern Territories"
-		// 	.formatted: "70749 Wyman Light↵49131 East Candidoview (Colorado)↵French Southern Territories"
-		// 	.id: 1
-		// 	.locality: "East Candidoview"
-		// 	.postalCode: "49131"
-		// 	.region: "Colorado"
-		// 	.streetAddress: "70749 Wyman Light"
-		// id: 1
-		// distance: 0.0993873022160798
-		// is_liked: true
-		// latitude: 30.6238
-		// longitude: -91.4145
-		// phone_number: "915 41 80 23"
-		// post_activity_id: 3
-		// title: "Kshlerin, Beahan and Ankunding"
-		// url: "http://prosaccokerluke.info"
-
 		var _getAddress = function ()
 		{
 			if (_isGoogle()) {

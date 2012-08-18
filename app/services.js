@@ -1,21 +1,5 @@
 App.Services = (function(lng, app, undefined) {
 
-	/** Demonstration Server URL (@airecico) **/
-	// var PLACES_API_URL = 'http://192.168.1.129:3000/';
-	/** Demonstration Server URL (@DIT) **/
-	// var PLACES_API_URL = 'http://lechuga.dit.upm.es:3000/';
-	/** Proxy Server URL for lechuga **/
-	var PLACES_API_URL = "/proxydit/";
-	/** Proxy Server URL for airecico **/
-	// var PLACES_API_URL = "/proxyair/";
-	/** On Rails Server URL **/
-	// var PLACES_API_URL = "/";
-
-	var GOOGLE_API_URL = "/google/";
-
-	var GOOGLE_API_KEY = "AIzaSyCGRJar96a3klge7MihfjEWYUAbgkoNKI4";
-
-
 	var _initAjaxSettings = function ()
 	{
 		$$.ajaxSettings.error = _genericAjaxError;
@@ -30,7 +14,7 @@ App.Services = (function(lng, app, undefined) {
 	 */
 
 	var signin = function (email, password) {
-		var url = PLACES_API_URL + 'users/sign_in.json';
+		var url = App.Config.PLACES_API_URL + 'users/sign_in.json';
 		var data = "user[email]="+email+"&user[password]="+password;
 		// data = JSON.stringify(data);
 
@@ -42,7 +26,7 @@ App.Services = (function(lng, app, undefined) {
 	};
 
 	var signout = function () {
-		var url = PLACES_API_URL + 'users/sign_out.json';
+		var url = App.Config.PLACES_API_URL + 'users/sign_out.json';
 		var data = "_method=DELETE";
 
 		$$.post(url,
@@ -68,7 +52,7 @@ App.Services = (function(lng, app, undefined) {
 
 	var loadUserPlaces = function ()
 	{
-		var url = PLACES_API_URL + 'places.json';
+		var url = App.Config.PLACES_API_URL + 'places.json';
 		var data = {};
 
 		$$.json(url, data, function(response) {
@@ -124,7 +108,7 @@ App.Services = (function(lng, app, undefined) {
 
 	var _loadNearbyPlacesFromServer = function (callback)
 	{
-		var url = PLACES_API_URL + 'places/nearby.json';
+		var url = App.Config.PLACES_API_URL + 'places/nearby.json';
 		var data = { lat: App.Data.userLocation.latitude, lng : App.Data.userLocation.longitude };
 		$$.json(url, data, callback);
 	};
@@ -217,7 +201,7 @@ App.Services = (function(lng, app, undefined) {
 
 	var _searchPlacesFromServer = function (query, callback)
 	{
-		var url = PLACES_API_URL + 'search.json';
+		var url = App.Config.PLACES_API_URL + 'search.json';
 		var data = { q : query, mode : 'place_search' };
 
 		console.error(url + "query=" + query);
@@ -264,7 +248,7 @@ App.Services = (function(lng, app, undefined) {
 
 	var loadUserFriends = function ()
 	{
-		var url = PLACES_API_URL + 'contacts.json';
+		var url = App.Config.PLACES_API_URL + 'contacts.json';
 		var data = {};
 
 		$$.json(url, data, function(response) {
@@ -282,7 +266,7 @@ App.Services = (function(lng, app, undefined) {
 
 	var loadFriendPlaces = function (user_slug)
 	{
-		var url = PLACES_API_URL + 'users/' + user_slug + '/places.json';
+		var url = App.Config.PLACES_API_URL + 'users/' + user_slug + '/places.json';
 		var data = {};
 
 		$$.json(url, data, function(response) {
@@ -303,7 +287,7 @@ App.Services = (function(lng, app, undefined) {
 
 	var loadPlaceInformation = function (place_id)
 	{
-		var url = PLACES_API_URL + 'places/'+place_id+".json";
+		var url = App.Config.PLACES_API_URL + 'places/'+place_id+".json";
 		var data = {};
 
 		$$.json(url, data, function(response) {
@@ -356,7 +340,7 @@ App.Services = (function(lng, app, undefined) {
 		if (post_activity_id < 0 && place.origin == 'google') {
 			doCreateAndLike(place);
 		} else {
-			var url = PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
+			var url = App.Config.PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
 			var data = {};
 
 			$$.post(url, data, function(response) {
@@ -375,7 +359,7 @@ App.Services = (function(lng, app, undefined) {
 	{
 		var place = App.Data.getPlace(place_id);
 		var post_activity_id = place.post_activity_id;
-		var url = PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
+		var url = App.Config.PLACES_API_URL + 'activities/'+post_activity_id+'/like.json';
 		var data = "_method=delete";
 
 		$$.post(url, data, function(response) {
@@ -388,7 +372,7 @@ App.Services = (function(lng, app, undefined) {
 
 	var doCreateAndLike = function(place)
 	{
-		var url = PLACES_API_URL + "places.json";
+		var url = App.Config.PLACES_API_URL + "places.json";
 		var data = {
 			place : {
 				address_attributes : place.address,
@@ -415,7 +399,7 @@ App.Services = (function(lng, app, undefined) {
 	{
 		console.error(post_activity_id);
 		console.error(comment);
-		var url = PLACES_API_URL + "comments.json";
+		var url = App.Config.PLACES_API_URL + "comments.json";
 		var data = {
 			comment : {
 				_activity_parent_id : post_activity_id,

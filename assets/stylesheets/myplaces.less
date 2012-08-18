@@ -1,0 +1,128 @@
+/**
+ * Stylesheet
+ *
+ * @namespace MyPlaces
+ * @class Main
+ *
+ * @author Óscar M. Solá
+ */
+
+@import "assets/stylesheets/myplaces.font.css";
+@import "theme.mistery-machine.colors.less";
+@import "theme.myplaces.less";
+@import "common.transforms.less";
+
+@yellow :#ffb515;
+@gray : #CCCCCC;
+@lightgray : #797979;
+@red : #EA2E49;
+@blue : #77C4D3;
+
+@color-recommended : #fe8800;
+@color-friends : #518259;
+@color-mine : #1f4a75;
+
+.floatbar {
+	background: #000;
+	background: rgba(0, 0, 0, 0.9);
+	a {
+		width: 100%;
+	}
+}
+
+.thumbnail {
+	width: 20px;
+	height: 20px;
+}
+
+.map.small {
+	width: 100%;
+	height: 200px;
+}
+
+.info {
+	background-color: @color-base;
+	small {
+		font-size: 0.85em;
+		color: @text-soft;
+	}
+	.text { 
+		color: @text-soft; text-shadow: 0 1px 0 #fff; font-size: 1em; 
+		a { color: @text-soft; text-shadow: 0 1px 0 #fff; font-size: 1em; }
+		.icon { color: @text-soft; text-shadow: 0 1px 0 #fff; }
+	}
+}
+.message {
+	color: @text-soft;
+}
+.switch {
+	color: @color-highlight;
+}
+.right-aligned {
+	text-align: right;
+	margin: 8px 11px 0 11px;
+}
+.onleft.iconset {
+	margin: 0 8px 0 0;
+}
+.search-box {
+	padding: 5px;
+	border-bottom: 1px solid @color-base-border;
+}
+div.list {
+	height: 100%;
+}
+.comments .textarea {
+	height: 20px;
+	resize: vertical;
+}
+
+/** SIZE modifiers */
+
+.bigicon {
+	font-size: 2em;
+	#TRANSFORM > .scale(1.5);
+}
+
+.smallicon {
+	font-size: 0.9em;
+	#TRANSFORM > .scale(0.5);
+}
+
+/** COLOR modifiers */
+
+.yellow {
+	color:@yellow;
+	background-color: transparent;
+}
+
+.gray {
+	color:@gray;
+	background-color: transparent;
+}
+
+.lightgray {
+	color: @lightgray;
+}
+
+.red {
+	color: @red;
+	background-color: transparent;
+}
+
+.blue {
+	color: @blue;
+	background-color: transparent;
+}
+
+.recommended.color {
+	color: @color-recommended;
+}
+
+.friends.color {
+	color: @color-friends;
+}
+
+.user.color {
+	color: @color-mine;
+}
