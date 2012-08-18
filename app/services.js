@@ -254,6 +254,14 @@ App.Services = (function(lng, app, undefined) {
 		lng.View.Scroll.init('search-results');
 	};
 
+	/**
+	 *  LOADING USER FRIENDS.
+	 *  Consists mainly in two methods
+	 *  - loadUserFriends : to get the friend list
+	 *  - loadFriendPlaces : to get the places of a friend.
+	 *
+	 */
+
 	var loadUserFriends = function ()
 	{
 		var url = PLACES_API_URL + 'contacts.json';
