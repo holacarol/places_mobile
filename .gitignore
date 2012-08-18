@@ -9,3 +9,6 @@ server/*
 
 # Ignoring config.js
 app/config.js
+
+# Ignoring all .orig files
+*.orig
