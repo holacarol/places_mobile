@@ -182,7 +182,7 @@ App.View = (function(lng, app, undefined) {
 	  */
 	lng.View.Template.create('place-description',
 		'<div id="place-{{id}}" class="place">\
-			<div class="onright"><a class="event like">href="#"><span class="icon star yellow bigicon"></span></a></div>\
+			<div class="onright"><a class="event like"><span class="icon star yellow bigicon"></span></a></div>\
 			<div>\
 				<div class="address info text">\
 					<div class="onleft iconset"><span class="icon pushpin bigicon"></span></div>\
