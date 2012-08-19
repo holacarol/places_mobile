@@ -64,7 +64,7 @@ App.View = (function(lng, app, undefined) {
 					maxZoom: 14,
 					center: place,
 					draggable: false,
-					disableDoubleClickZoom: true,
+					disableDoubleClickZoom: true
 
 			});
 			_placeMarker(place,"user");
@@ -102,7 +102,7 @@ App.View = (function(lng, app, undefined) {
 	  *  Template for Places in the list 
 	  */
 	lng.View.Template.create('place-in-list',
-		'<li id="place-{{id}}" class="place selectable" data-icon="pushpin">\
+		'<li id="place-{{id}}" class="place selectable">\
 			<div class="onright"><a href="#" class="event like"><span class="icon star gray bigicon"></span></a></div>\
 			<div class="selectable">\
 				<div class="onleft icon pushpin"></div>\
@@ -117,7 +117,7 @@ App.View = (function(lng, app, undefined) {
 	  *  Template for Places in nearby list (where the distance appears) 
 	  */
 	lng.View.Template.create('place-nearby-in-list',
-		'<li id="place-{{id}}" class="place selectable origin-{{origin}}" data-icon="pushpin">\
+		'<li id="place-{{id}}" class="place selectable origin-{{origin}}">\
 			<div class="selectable">\
 				<div class="onleft icon pushpin"></div>\
 				<div><strong>{{title}}</strong>\

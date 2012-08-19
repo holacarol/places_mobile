@@ -175,7 +175,7 @@ App.Services = (function(lng, app, undefined) {
 				field: 'distance.amount',
 				type: 'asc'
 			}
-		});''
+		});
 		App.View.switchFromTo('#place-search #search-results','#place-search #nearby-results');
 		lng.View.Scroll.init('nearby-results');
 	};
@@ -233,7 +233,7 @@ App.Services = (function(lng, app, undefined) {
 			// 	field: 'distance.amount',
 			// 	type: 'asc'
 			// }
-		});''
+		});
 		App.View.switchFromTo('#place-search #nearby-results','#place-search #search-results');
 		lng.View.Scroll.init('search-results');
 	};
@@ -302,7 +302,7 @@ App.Services = (function(lng, app, undefined) {
 					template: "comment",
 					data: comments
 				});
-				LUNGO.View.Scroll.init('place-description');
+				lng.View.Scroll.init('place-description');
 			} else {
 				App.View.switchFromTo(".place.comments .message.loading",".place.comments .message.none");
 			}
@@ -419,7 +419,7 @@ App.Services = (function(lng, app, undefined) {
 					template: "comment",
 					data: response.comment
 				});
-				LUNGO.View.Scroll.init('place-description');
+				lng.View.Scroll.init('place-description');
             },
             dataType: 'json',
             contentType: 'application/json'
