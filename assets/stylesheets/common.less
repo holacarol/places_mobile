@@ -1,0 +1,55 @@
+/**
+ * CSS common transforms for LESS based compilation
+ *
+ * @namespace Common
+ *
+ * @author Óscar-Miguel Solá (oscarmsola)
+ */
+
+ #TRANSFORM {
+ 	.scale (@scale) {
+ 		-webkit-transform: scale(@scale);
+		-moz-transform: scale(@scale);
+		-o-transform: scale(@scale);
+		-ms-transform: scale(@scale);
+		transform: scale(@scale);
+ 	}
+ }
+
+ #BORDER {
+ 	.rounded-borders (@radius: 2px) {
+ 		-webkit-border-radius: @radius;
+  		-moz-border-radius: @radius;
+  		border-radius: @radius;
+ 	}
+ }
+
+ #BACKGROUND {
+ 	.pattern_stripe (@color_1,@color_2,@angle : 45deg, @size: 2px) {
+ 		background: @color_1;
+ 		background: linear-gradient(@angle,@color_1 25%,@color_2 25%, @color_2 50%, @color_1 50%, @color_1 75%, @color_2 75%);
+ 		background: -moz-linear-gradient(@angle,@color_1 25%,@color_2 25%, @color_2 50%, @color_1 50%, @color_1 75%, @color_2 75%);
+		background: -webkit-linear-gradient(@angle,@color_1 25%,@color_2 25%, @color_2 50%, @color_1 50%, @color_1 75%, @color_2 75%);
+		background: -o-linear-gradient(@angle,@color_1 25%,@color_2 25%, @color_2 50%, @color_1 50%, @color_1 75%, @color_2 75%);
+		background: -ms-linear-gradient(@angle,@color_1 25%,@color_2 25%, @color_2 50%, @color_1 50%, @color_1 75%, @color_2 75%);
+		background-size: @size @size;
+ 	}
+
+ 	.gradient_iphone (@color_1,@color_2) {
+ 		background: @color_1;
+ 		background: linear-gradient(top,@color_1 50%,@color_2 50%);
+ 		background: -moz-linear-gradient(top,@color_1 50%,@color_2 50%);
+ 		background: -webkit-linear-gradient(top,@color_1 50%,@color_2 50%);
+ 		background: -o-linear-gradient(top,@color_1 50%,@color_2 50%);
+ 		background: -ms-linear-gradient(top,@color_1 50%,@color_2 50%);
+ 	}
+
+ 	.gradient_smooth (@color_1,@color_2,@start: 50%) {
+ 		background: @color_1;
+ 		background: linear-gradient(top,@color_1 @start,@color_2 100%);
+ 		background: -moz-linear-gradient(top,@color_1 @start,@color_2 100%);
+ 		background: -webkit-linear-gradient(top,@color_1 @start,@color_2 100%);
+ 		background: -o-linear-gradient(top,@color_1 @start,@color_2 100%);
+ 		background: -ms-linear-gradient(top,@color_1 @start,@color_2 100%);
+ 	}
+ }
