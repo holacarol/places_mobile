@@ -62,7 +62,6 @@ App.View = (function(lng, app, undefined) {
 					zoom: 14,
 					minZoom: 14,
 					maxZoom: 14,
-					//type: 'HYBRID',
 					center: place,
 					draggable: false,
 					disableDoubleClickZoom: true,
@@ -71,18 +70,10 @@ App.View = (function(lng, app, undefined) {
 			_placeMarker(place,"user");
 		}
 
-		var _placeMarkers = function (places, marker) {
-			for (var i=0; i<places.length; i++) {
-				place = places[i];
-				_placeMarker(place,marker);
-				/*
-				lng.Sugar.GMap.addMarker(
-					{ latitude : place.latitude,
-					  longitude : place.longitude },
-					marker,
-					false
-				);
-				*/
+		var _placeMarkers = function (places_array, marker) {
+			for (var i=0; i<places_array.length; i++) {
+				place = places_array[i];
+				_placeMarker(places_array,marker);
 			};
 		}
 
@@ -190,7 +181,6 @@ App.View = (function(lng, app, undefined) {
 						<p>\
 						{{address.streetAddress}}<br>\
 						{{address.postalCode}}, {{address.locality}}. {{address.country}}\
-						<p>\
 					</div>\
 				</div>\
 				<div class="contact info text">\
@@ -201,10 +191,6 @@ App.View = (function(lng, app, undefined) {
 						<a href="{{url}}">{{url}}</a>\
 					</div>\
 				<div>\
-			</div>\
-			<div class="place field title">\
-				<div>\
-				</div>\
 			</div>\
 		</div>'
 	);
