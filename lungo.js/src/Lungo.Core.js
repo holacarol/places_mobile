@@ -149,6 +149,7 @@ LUNGO.Core = (function(lng, $$, undefined) {
      * @param {string} Type of order: asc (ascendent) or desc (descendent)
      * @return {list} Ordered list
      */
+    /** modified to accept nested properties. by @oscarmsola. */
     var orderByProperty = function(data, property, order) {
         var order_operator = (order === 'desc') ? -1 : 1;
 
@@ -163,6 +164,7 @@ LUNGO.Core = (function(lng, $$, undefined) {
         );
     };
 
+    /** Added to get nested properties from an element. by @oscarmsola */
     var _getProperty = function (element, property) {
         var tree = property;
         if (toType(property) == 'string') {
@@ -173,7 +175,7 @@ LUNGO.Core = (function(lng, $$, undefined) {
         } else {
             return _getProperty(element[tree.shift()],tree);
         }
-    }
+    };
 
     /**
      * Returns a correct URL using hashtag character

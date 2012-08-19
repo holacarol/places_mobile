@@ -81,8 +81,9 @@ LUNGO.Router = (function(lng, undefined) {
      *
      * @method back
      */
+    /** Modified to accept recursive backs to target section. by @oscarmsola */
     var back = function(target) {
-        if (target != undefined) {
+        if (target !== undefined) {
             target = lng.Core.parseUrl(target);
             if (target == _getHistoryCurrent()) {
                 return;
@@ -95,7 +96,7 @@ LUNGO.Router = (function(lng, undefined) {
         lng.Router.History.removeLast();
         lng.dom(_getHistoryCurrent()).removeClass(CLASS.HIDE).addClass(CLASS.HIDE_REVOKE).addClass(CLASS.SHOW);
 
-        if (target != undefined) {
+        if (target !== undefined) {
             back(target);
         }
     };

@@ -402,6 +402,7 @@ window.Quo = Quo;
     /**
      * ?
      */
+    /** modified to accept more than one element. (by @oscarmsola) */
     $$.fn.append = function(value) {
         return this.each(function() {
             if ($$.toType(value) === 'string') {

@@ -90,7 +90,7 @@ App.Events = (function(lng, app, undefined) {
 	lng.dom('a.event.like').tap(function(event) {
 		/** We identify if it's like or undo like depending on the color class */
 		var is_like_action = lng.dom(this).children('.icon.star').hasClass('gray');
-		var place = lng.dom(this).parent().parent();
+		var place = lng.dom(this).parent('.place');
 		var id = place.attr('id').replace('place-','');
 		if (is_like_action) {
 			App.Services.doLike(id);

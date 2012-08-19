@@ -55,16 +55,18 @@ LUNGO.View.Template.Binding = (function(lng, undefined) {
         return markup;
     };
 
+    /** Modified method to accept nested objects (by @oscarmsola) **/
     var _bindProperties = function(element, template, prefix) {
         var binding_field;
-        var binding_prefix = (prefix!=undefined)?prefix+".":"";
-        var removeNoBindedProperties = (prefix!=undefined)?false:true;
+        var binding_prefix = (prefix!==undefined)?prefix+".":"";
+        var removeNoBindedProperties = (prefix!==undefined)?false:true;
         for (var property in element) {
             if (lng.Core.isOwnProperty(element, property) && element[property] !== null) {
                 if (lng.Core.toType(element[property]) === 'object') {
-                    /** We just need to add the possibility to detect if this object is really used in the template to parse it **/
+                    /** TODO: We just need to add the possibility to detect if this object is really used in the template to parse it **/
                     template = _bindProperties(element[property], template, binding_prefix + property);
                 }
+                /** WARNING: This does not support nested arrays **/
                 else {
                     binding_field = new RegExp(BINDING.START + binding_prefix + property + BINDING.END, 'g');
                     template = template.replace(binding_field, element[property]);
