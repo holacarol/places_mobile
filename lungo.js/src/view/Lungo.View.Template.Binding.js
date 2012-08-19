@@ -63,7 +63,7 @@ LUNGO.View.Template.Binding = (function(lng, undefined) {
             if (lng.Core.isOwnProperty(element, property) && element[property] !== null) {
                 if (lng.Core.toType(element[property]) === 'object') {
                     /** We just need to add the possibility to detect if this object is really used in the template to parse it **/
-                    template = _bindProperties(element[property], template, property);
+                    template = _bindProperties(element[property], template, binding_prefix + property);
                 }
                 else {
                     binding_field = new RegExp(BINDING.START + binding_prefix + property + BINDING.END, 'g');

@@ -1,329 +1,263 @@
 /**
  * Stylesheet
  *
- * @namespace LUNGO.Theme
+ * @namespace myplaces.theme
  * @class Default
  *
- * @author Javier Jimenez Villar <javi@tapquo.com> || @soyjavi
+ * @author Óscar M. Solá && holacarol
  */
 
 .app {
-  background: @color-background;
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+
+	background: @color-background;
+	font-family: 'Roboto', Helvetica, Arial, sans-serif;
 }
+
+
 /* @group <header> & <footer> & <article> */
 header {
-  background: @color-main -webkit-gradient(linear, left top, left bottom, color-stop(0.5, @color-main), color-stop(1, @color-main-darker));
-  // border-top: 1px solid @color-main-lighter;
-  // border-bottom: 1px solid @color-main-darker;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-  .title {
-    color: @text-highlight;
-    text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
-  }
-  .button {
-    background: rgba(255,255,255,0);
-    &.onleft { border-right: 1px solid rgba(255,255,255,0.5); }
-    &.onright { border-left: 1px solid rgba(255,255,255,0.5); }
-    &:active, &.active { background: rgba(255,255,255,0.2); }
-  }
+
+	// background: @color-main -webkit-gradient(linear, left top, left bottom, color-stop(0.5, @color-main), color-stop(1, @color-main-darker));
+	#BACKGROUND > .gradient_smooth(@color-main,@color-main-darker);
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+
+	.title {
+		color: @text-highlight;
+		text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
+	}
+
+	.button {
+		background: rgba(255,255,255,0);
+		&.onleft { border-right: 1px solid rgba(255,255,255,0.5); }
+		&.onright { border-left: 1px solid rgba(255,255,255,0.5); }
+		&:active, &.active { background: rgba(255,255,255,0.2); }
+	}
+
 }
+
 footer {
-  background: @color-layout -webkit-gradient(linear, left top, left bottom, color-stop(0.25, @color-layout), color-stop(1, darken(@color-layout,50%));
-  border-top: 1px inset darken(@color-layout,50%);
+
+	// background: @color-layout -webkit-gradient(linear, left top, left bottom, color-stop(0.25, @color-layout), color-stop(1, darken(@color-layout,50%));
+	#BACKGROUND > .gradient_smooth(@color-layout,darken(@color-layout,50%),25%);
+	border-top: 1px inset darken(@color-layout,50%);
 }
+
 article {
-  background-color: @color-background;
-  .title {
-    color: @text-above-base;
-    text-shadow: 0px 1px 0px #fff;
-  }
+
+	// background-color: @color-background;
+	#BACKGROUND > .pattern_stripe(@color-base,@color-background);
+
+	.title {
+		color: @text-above-base;
+		text-shadow: 0px 1px 0px #fff;
+	}
 }
 /* @end */
+
 /* @group <nav> */
 nav a {
-  color: rgba(255, 255, 255, 0.5);
-  &.current, &.active { 
-    color: @text-highlight;
-  }
+
+	color: rgba(255, 255, 255, 0.5);
+	
+	&.current, &.active { 
+		color: @text-highlight;
+	}
 }
+
 /* @group <toolbar> */
 .toolbar a {
-  color: rgba(255, 255, 255, 0.2);
-  &.current, &.active {
-    background: @color-main;
-    box-shadow: inset 0px 0px 8px #101010;
-    text-shadow: 0px 1px 4px #000;
-  }
+
+	color: rgba(255, 255, 255, 0.2);
+
+	&.current, &.active {
+
+		background: @color-main;
+		box-shadow: inset 0px 0px 8px #101010;
+		text-shadow: 0px 1px 4px #000;
+
+	}
 }
 /* @group <groupbar> */
 .groupbar {
-  background: @color-above-base;
-  border-bottom: solid 1px rgba(0, 0, 0, 0.1);
-  a {
-    color: @text-above-base;
-    &.current {
-      color: @text-above-base;
-      border-bottom: solid 3px @color-main-lighter;
-    }
-  } 
+
+	background: @color-above-base;
+	border-bottom: solid 1px rgba(0, 0, 0, 0.1);
+
+	a {
+		color: @text-above-base;
+
+		&.current {
+			color: @text-above-base;
+			border-bottom: solid 3px @color-main-lighter;
+		}
+	} 
 }
 /* @end */
-/* @group <aside> */
-/* -- we dont use aside
-aside {
-  background: #252525;
-}
-aside .title {
-  background: #101010;
-  border: none;
-}
-aside a {
-  color: #fff;
-  text-shadow: 0px 1px 0px #000;
-  border-bottom: 1px inset #101010;
-  border-top: 1px inset #868686;
-}
-aside a.current {
-  background: #1c1c1c;
-  box-shadow: inset 0px 0px 8px #101010;
-  border-top: 1px inset #1c1c1c;
-}
-aside a .icon {
-  text-shadow: none;
-  color: #7a7a7a;
-}
-aside .anchor {
-  background: #101010;
-  color: #7a7a7a;
-}
-section.aside {
-  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.5);
-}
-section.aside.onright {
-  box-shadow: 4px 0 8px rgba(0, 0, 0, 0.5);
-}
------ */
 @media handheld, only screen and (min-width: 768px) {
-  section.current, section.show {
-    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.5);
-  }
-  section.current.onright, section.show.onright {
-    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.5);
-  }
+	section.current, section.show {
+		box-shadow: -4px 0 8px rgba(0, 0, 0, 0.5);
+	}
+	section.current.onright, section.show.onright {
+		box-shadow: 4px 0 8px rgba(0, 0, 0, 0.5);
+	}
 }
 /* @end */
 /* @group .list */
 .list {
-  color: @text-color;
-  /* regular list */
-  li {
-    background: @color-base;
-    border-bottom: 1px inset @color-background;
-    &:last-child {
-      border-bottom: none;
-    }
-    small, .onright:not(.bubble) {
-      color: @text-soft;
-    }
-    &:not(.toolbar) a {
-      color: @text-color;
-    }
-    &.selectable:active {
-      background: @color-highlight-lighter;
-      color: @text-highlight;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
-      small, .onright:not(.bubble) { 
-        color: @text-highlight;
-        text-shadow: none;
-      }
-    }
-  }
-  /* indented list */
-  &.indented {
-    li {
-      border-left: solid 1px @color-base-border;
-      border-right: solid 1px @color-base-border;
-      &:first-child {
-        border-top: solid 1px @color-base-border;
-      }
-      &:last-child {
-        border-bottom: solid 1px  @color-base-border;
-      }
-    }
-  }
-  /* anchor */
-  .anchor {
-    background: @color-highlight-lighter;
-    color: @text-highlight;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
-    border: none;
-  }
-  /* tip */
-  .tip {
-    color: @text-above-base;
-    &.darker {
-      background-color: @color-layout;
-      color: @text-highlight;
-      text-shadow: 0px 1px 0px #000;
-      a {
-        color: @text-highlight !important;
-      }
-    }
-    &.dark {
-      background-color: @color-above-base;
-      box-shadow: inset 0px 1px 0px lighten(@color-above-base,50%);
-      text-shadow: 0px 1px 0px lighten(@color-above-base,50%);
-    }
-  }
-  /* toolbar */
-  .toolbar {
-    border-bottom-color: rgba(0, 0, 0, 0.2);
-    .toolbar a {
-      box-shadow: 1px 0px 0px #d9d9d9;
-      &:last-child {
-        box-shadow: none;
-      }
-      &.current {
-        background: transparent;
-        color: #333;
-        text-shadow: none !important;
-      }
-    }
-  }
+
+	color: @text-color;
+
+	/* regular list */
+	li {
+		background: @color-base;
+		border-bottom: 1px inset @color-background;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		small, .onright:not(.bubble) {
+			color: @text-soft;
+		}
+
+		&:not(.toolbar) a {
+			color: @text-color;
+		}
+
+		&.selectable:active {
+			background: @color-highlight-lighter;
+			color: @text-highlight;
+			text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+			small, .onright:not(.bubble) { 
+				color: @text-highlight;
+				text-shadow: none;
+			}
+		}
+	}
+
+	/* indented list */
+	&.indented li {
+		border-left: solid 1px @color-base-border;
+		border-right: solid 1px @color-base-border;
+
+		&:first-child {
+			border-top: solid 1px @color-base-border;
+		}
+
+		&:last-child {
+			border-bottom: solid 1px  @color-base-border;
+		}
+	}
+
+	/* comments list */
+	&.comments li {
+		border-left: none;
+		border-right: none;
+		margin: 2px 0px;
+		background: fade(@color-base,80%);
+
+		&:first-child { border-top: none; }
+		&:last-child { border-bottom: none; }
+	}
+
+	/* toolbar */
+	.toolbar {
+		border-bottom-color: rgba(0, 0, 0, 0.2);
+
+		.toolbar a {
+			box-shadow: 1px 0px 0px #d9d9d9;
+
+			&:last-child {
+				box-shadow: none;
+			}
+
+			&.current {
+				background: transparent;
+				color: #333;
+				text-shadow: none !important;
+			}
+		}
+	}
 }
 /* @end */
 /* @group widgets */
 .splash {
-  background: @color-main -webkit-gradient(linear, left top, right bottom, color-stop(0.6, @color-main), color-stop(1, @color-main-compound));
-  color: @text-highlight;
-  text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
-  .button {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    #BORDER > .rounded-borders (2px);
-    &:active, &.active { background: rgba(255,255,255,0.2); }
-  }}
-/* @group .button */
-/*
-.button {
-  border-bottom: 1px inset rgba(0, 0, 0, 0.2);
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding;
-  background-clip: padding-box;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 3px rgba(0, 0, 0, 0.2);
-  background: @color-mid-dark;
-  &:active, &.active {
-    -webkit-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 0 2px rgba(0, 0, 0, 0.2);
-    border-bottom-color: rgba(0, 0, 0, 0);
-  }
+
+	background: @color-main -webkit-gradient(
+		linear,
+		left top, 
+		right bottom, 
+		color-stop(0.6, @color-main), 
+		color-stop(1, @color-main-compound)
+	);
+	color: @text-highlight;
+	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
+
+	.button {
+		background: rgba(255,255,255,0.1);
+		border: 1px solid rgba(255,255,255,0.2);
+		#BORDER > .rounded-borders (2px);
+		&:active, &.active { background: rgba(255,255,255,0.2); }
+	}
 }
-header .button:active,
-footer .button:active,
-header .button:active,
-footer .button:active {
-  height: 29px;
-  position: relative;
-  top: 1px;
-}
-*/
-/**
-.button.default {
-  background: @color-mid-dark;
-}
-.button.default:active, .button.default.active {
-  background: @color-mid-dark;
-}
-*/
-/* @end */
 /* @group <inputs> */
 input, textarea, select {
-  border: 1px solid @color-base-border;
-  color: @text-soft;
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
-  &:focus {
-    border-color: @color-main;
-    color: @color-main;
-  }
+
+	border: 1px solid @color-base-border;
+	color: @text-soft;
+	font-family: 'Roboto', Helvetica, Arial, sans-serif;
+
+	&:focus {
+		border-color: @color-main;
+		color: @color-main;
+	}
 }
 /* @group checkbox | radio */
 input[type="checkbox"], input[type="radio"] {
-  + span {
-    color: @text-highlight;
-    background: @color-dark;
-    &::before {
-      background: @color-mid-light;
-    }
-  }
-  &:checked + span {
-    background: @color-highlight;
-  }
+
+	+ span {
+		color: @text-highlight;
+		background: @color-dark;
+
+		&::before {
+			background: @color-mid-light;
+		}
+	}
+
+	&:checked + span {
+		background: @color-highlight;
+	}
 }
 /* @group range */
 input[type="range"] {
-  background-color: @color-mid-light;
-  &:active {
-    background-color: @color-highlight;
-  }
-  &::-webkit-slider-thumb {
-    border: solid 7px rgba(255, 255, 255, 0.5);
-    background: @color-highlight;
-  }
-  &:active::-webkit-slider-thumb {
-    box-shadow: 0px 0px 4px @color-highlight;
-  }
+
+	background-color: @color-mid-light;
+
+	&:active {
+		background-color: @color-highlight;
+	}
+
+	&::-webkit-slider-thumb {
+		border: solid 7px rgba(255, 255, 255, 0.5);
+		background: @color-highlight;
+	}
+
+	&:active::-webkit-slider-thumb {
+		box-shadow: 0px 0px 4px @color-highlight;
+	}
 }
 label {
-  color: @color-main;
-  text-transform: uppercase;
-  font-weight: bold;
+
+	color: @color-main;
+	text-transform: uppercase;
+	font-weight: bold;
+
 }
 .select:after {
-  background: @color-mid;
-  color: white;
+
+	background: @color-mid;
+	color: white;
+
 }
 /* @end */
-/* @group .progress */
-/* -- we dont use progress bars
-.progress .labels {
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 18px;
-  color: @text-soft;
-}
-.progress .bar {
-  background: @color-mid-light;
-}
-.progress .bar .value {
-  background: @color-highlight;
-}
-.progress .bar .value .glow {
-  background-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0px 0px 3px @color-highlight;
-}
-------- */
-/* @end */
-/* @end */
-/* -- we dont use bubbles
-.bubble {
-  color: #fff;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding;
-  background-clip: padding-box;
-  text-shadow: none;
-  font-weight: bold !important;
-}
-header .bubble.count {
-  background: #2c2c2d;
-}
-.bubble.count {
-  background: @color-main;
-}
-------- */
 /* @end */
