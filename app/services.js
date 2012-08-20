@@ -5,6 +5,28 @@ App.Services = (function(lng, app, undefined) {
 		$$.ajaxSettings.error = _genericAjaxError;
 	};
 
+	/** 
+	 *  Using our own Ajax Error function that will go to the login view when a 401 "unauthorized" 
+	 *  event ocurred.
+	 */
+	var _genericAjaxError = function (internal, xhr) {
+		if (xhr.status == 401) {
+			var error = undefined;
+			console.error(xhr);
+			console.error(xhr.response);
+			if (xhr.response !== undefined) {
+				if (lng.Core.toType(xhr.response) == 'object') {
+					error = xhr.response.error;
+				} else if (lng.Core.toType(xhr.response) == 'string') {
+					error = JSON.parse(xhr.response).error;
+				}
+			}
+			console.error(error);
+			App.View.requestLogin(error);
+		}
+	};
+
+
 	/**
 	 *  INITIALIZATION and LOGIN
 	 *  We are going to provide functionalities to:
@@ -444,6 +466,12 @@ App.Services = (function(lng, app, undefined) {
 		}
 	}
 
+	/** 
+	 *  REQUEST USER LOCATION
+	 *  Basic requets to the HTML5 native browser capability and the callback functions:
+	 *  - _setUserLocation: on success
+	 *  - _setUserLocationError : on error
+	 */
 	var requestUserLocation = function ()
 	{
 		//check if the geolocation object is supported, if so get position
@@ -461,12 +489,6 @@ App.Services = (function(lng, app, undefined) {
 	var _setUserLocationError = function (error)
 	{
 		console.error(error);
-	};
-
-	var _genericAjaxError = function (message, xhr) {
-		if (xhr.status == 401) {
-			App.View.requestLogin();
-		}
 	};
 
 	/**

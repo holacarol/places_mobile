@@ -97,6 +97,14 @@ App.View = (function(lng, app, undefined) {
 
 	})(LUNGO, App);
 
+	/** ERROR MESSAGES */
+	var ERROR_MESSAGES = {
+
+		unauthorized : "",
+		invalid : "Wrong username and password. Please try again."
+
+	};
+
 	/** TEMPLATES **/
 	/** 
 	  *  Template for Places in the list 
@@ -201,14 +209,18 @@ App.View = (function(lng, app, undefined) {
 	var _initView = function () {
 	}
 
-	var requestLogin = function (message) {
+	var requestLogin = function (error) {
 		/** Show the login form **/
 		lng.dom('#login div.form').show();
 		/** Redirect to login view **/
 		lng.Router.back('login');
 		/** Display error message if adequate **/
-		if (message != undefined) {
-			// do something
+		if (error != undefined && error != '') {
+			var message = ERROR_MESSAGES[error];
+			if (message != undefined && message != '') {
+				lng.dom('#login .message.error').html(message);
+				lng.dom('#login .message.error').removeClass('no-display');
+			}
 		}
 	}
 

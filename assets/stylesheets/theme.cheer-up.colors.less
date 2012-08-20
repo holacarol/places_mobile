@@ -1,0 +1,47 @@
+/**
+ * Cheer Up Emo Kid Palette Theme
+ * (http://www.colourlovers.com/palette/1930/cheer_up_emo_kid)
+ *
+ * @namespace holacarol.themes.CheerUp
+ * @class Colours
+ *s
+ * @author Óscar-Miguel Solá (oscarmsola)
+ */
+
+/**
+ * Colour definitions working with a main pallete of five colours
+ * - main : strong colour to identify the application
+ * - highlight : for highlighting elements
+ * - base : for lists, backgrounds
+ * - text : for main texts
+ * - contrast : a contrast colour for the main;
+ */
+@color-main : #FF6B6B; // Main color of the application/brand (splash, header, etc)
+	@color-main-darker : #C44D58;
+	@color-main-lighter : lighten(@color-main,6%);
+	@color-main-compound : #CC0C39;
+
+@color-highlight : #CBEBA0; // Highlight contrast color
+	@color-highlight-lighter : #CBEBA0;
+
+@color-base : lighten(#CBEBA0,80%); // Colour for base elements (lists, info)
+	@color-above-base : #4ECDC4; // Colour for elements above above the base (like groupbars)
+	@color-background : #f1f1f1; // Colour for background (articles, application)
+	@color-base-border : @color-background; // Color for borders
+
+@color-layout : #2c2c2d; // Colour that frames the content (as a footer or aside)
+
+@color-dark : #2c2c2d; // Dark Scale : 0;
+@color-mid-dark : #4b4b4b; // Dark Scale : 1;
+@color-mid : #7C7C7C; // Dark Scale: 2;
+@color-mid-light : #c7c7c7; // Dark Scale : 3;
+
+@text-highlight : #FFFFFF; // Colour for texts over color-main or color-highlight
+@text-color : #191D21; // Colour for texts over color-base
+@text-soft : #556270; // Softened colour for texts over color-base
+@text-above-base : #FFFFFF; // Colour for texts over @color-above-base
+@text-on-selectable : @text-color; // Colour for texts over selectable list items
+
+@color-recommended : #C44D58;
+@color-friends : #59A80F;
+@color-mine : #556270;

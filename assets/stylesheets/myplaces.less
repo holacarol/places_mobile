@@ -18,10 +18,6 @@
 @red : #EA2E49;
 @blue : #77C4D3;
 
-@color-recommended : #fe8800;
-@color-friends : #518259;
-@color-mine : #1f4a75;
-
 .floatbar {
 	background: #000;
 	background: rgba(0, 0, 0, 0.9);
@@ -77,7 +73,9 @@ div.list {
 	height: 20px;
 	resize: vertical;
 }
-
+.no-display {
+	visibility: hidden;
+}
 
 /** SIZE modifiers */
 
@@ -128,8 +126,3 @@ div.list {
 .user.color {
 	color: @color-mine;
 }
-
-#list-mine .icon.pushpin { .user.color; }
-#list-friends .icon.pushpin { .friends.color; }
-#list-recommended .icon.pushpin { .recommended.color; }
-#friend-places-list .icon.pushpin { .friends.color; }

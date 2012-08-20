@@ -126,10 +126,10 @@ nav a {
 
 		&.selectable:active {
 			background: @color-highlight-lighter;
-			color: @text-highlight;
+			color: @text-on-selectable;
 			text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 			small, .onright:not(.bubble) { 
-				color: @text-highlight;
+				color: @text-on-selectable;
 				text-shadow: none;
 			}
 		}
@@ -182,7 +182,7 @@ nav a {
 /* @end */
 /* @group widgets */
 .splash {
-
+	/*
 	background: @color-main -webkit-gradient(
 		linear,
 		left top, 
@@ -190,6 +190,8 @@ nav a {
 		color-stop(0.6, @color-main), 
 		color-stop(1, @color-main-compound)
 	);
+	*/
+	background: url('/myplaces/assets/images/splash_bg.png');
 	color: @text-highlight;
 	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
 
@@ -198,6 +200,13 @@ nav a {
 		border: 1px solid rgba(255,255,255,0.2);
 		#BORDER > .rounded-borders (2px);
 		&:active, &.active { background: rgba(255,255,255,0.2); }
+	}
+
+	.message {
+		font-size: 0.85em;
+		color: @text-highlight;
+		text-shadow: none;
+		margin: 10px auto;
 	}
 }
 /* @group <inputs> */
