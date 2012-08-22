@@ -72,9 +72,9 @@ App.View = (function(lng, app, undefined) {
 
 		var _placeMarkers = function (places_array, marker) {
 			for (var i=0; i<places_array.length; i++) {
-				place = places_array[i];
-				_placeMarker(places_array,marker);
-			};
+				var place = places_array[i];
+				_placeMarker(place,marker);
+			}
 		}
 
 		var _placeMarker = function (place, marker) 
