@@ -1,5 +1,7 @@
 App.Services = (function(lng, app, undefined) {
 
+	var _init = false;
+
 	var _initAjaxSettings = function ()
 	{
 		$$.ajaxSettings.error = _genericAjaxError;
@@ -14,7 +16,7 @@ App.Services = (function(lng, app, undefined) {
 			var error = undefined;
 			console.error(xhr);
 			console.error(xhr.response);
-			if (xhr.response !== undefined) {
+			if (xhr.response !== undefined && _init) {
 				if (lng.Core.toType(xhr.response) == 'object') {
 					error = xhr.response.error;
 				} else if (lng.Core.toType(xhr.response) == 'string') {
@@ -39,10 +41,11 @@ App.Services = (function(lng, app, undefined) {
 		var url = App.Config.PLACES_API_URL + 'users/sign_in.json';
 		var data = "user[email]="+email+"&user[password]="+password;
 		// data = JSON.stringify(data);
-
+		_init = true;
 		$$.post(url, data, function(response, xhr) {
 			console.error(url);
 			console.error(response);
+
 			App.Services.initUser();
 		}, "application/json");
 	};
@@ -55,6 +58,7 @@ App.Services = (function(lng, app, undefined) {
 				data,
 				function(response, xhr) {
 					console.error(xhr);
+					_init = false;
 					app.View.requestLogin();
 				},
 				"application/json");
@@ -79,6 +83,8 @@ App.Services = (function(lng, app, undefined) {
 
 		$$.json(url, data, function(response) {
 			console.error(response);
+
+			_init = true;
 
 			App.Data.setUserPlaces(response);
 

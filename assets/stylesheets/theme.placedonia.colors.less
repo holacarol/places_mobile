@@ -1,0 +1,47 @@
+/**
+ * Mistery Machine Palette Theme
+ * (http://www.colourlovers.com/palette/940086/mystery_machine)
+ *
+ * @namespace holacarol.themes.MisteryMachine
+ * @class Colours
+ *s
+ * @author Óscar-Miguel Solá (oscarmsola)
+ */
+
+/**
+ * Colour definitions working with a main pallete of five colours
+ * - main : strong colour to identify the application
+ * - highlight : for highlighting elements
+ * - base : for lists, backgrounds
+ * - text : for main texts
+ * - contrast : a contrast colour for the main;
+ */
+@color-main : #f2753e; // Main color of the application/brand (splash, header, etc)
+	@color-main-darker : darken(@color-main,6%);
+	@color-main-lighter : lighten(@color-main,6%);
+	@color-main-compound : #CC0C39;
+
+@color-highlight : #60B99A; // Highlight contrast color
+	@color-highlight-lighter : #60B99A;
+
+@color-base :  lighten(#F3F5DB,10%); // Colour for base elements (lists, info)
+	@color-above-base : fade(#D3CE3D,40%); // Colour for elements above above the base (like groupbars)
+	@color-background : #e1e1e1; // Colour for background (articles, application)
+	@color-base-border : @color-background; // Color for borders
+
+@color-layout : #2c2c2d; // Colour that frames the content (as a footer or aside)
+
+@color-dark : #2c2c2d; // Dark Scale : 0;
+@color-mid-dark : #4b4b4b; // Dark Scale : 1;
+@color-mid : #7C7C7C; // Dark Scale: 2;
+@color-mid-light : #c7c7c7; // Dark Scale : 3;
+
+@text-highlight : #FFFFFF; // Colour for texts over color-main or color-highlight
+@text-color : #1F1813; // Colour for texts over color-base
+@text-soft : #554236; // Softened colour for texts over color-base
+@text-above-base : #554236; // Colour for texts over @color-above-base
+@text-on-selectable : @text-highlight; // Colour for texts over selectable list items
+
+@color-recommended : #fe8800;
+@color-friends : #518259;
+@color-mine : #1f4a75;

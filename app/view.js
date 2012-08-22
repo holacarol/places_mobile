@@ -97,14 +97,6 @@ App.View = (function(lng, app, undefined) {
 
 	})(LUNGO, App);
 
-	/** ERROR MESSAGES */
-	var ERROR_MESSAGES = {
-
-		unauthorized : "",
-		invalid : "Wrong username and password. Please try again."
-
-	};
-
 	/** TEMPLATES **/
 	/** 
 	  *  Template for Places in the list 
@@ -216,11 +208,10 @@ App.View = (function(lng, app, undefined) {
 		lng.Router.back('login');
 		/** Display error message if adequate **/
 		if (error != undefined && error != '') {
-			var message = ERROR_MESSAGES[error];
-			if (message != undefined && message != '') {
-				lng.dom('#login .message.error').html(message);
-				lng.dom('#login .message.error').removeClass('no-display');
-			}
+			lng.dom('#login .message.error').html(error);
+			lng.dom('#login .message.error').removeClass('no-display');
+		} else {
+			lng.dom('#login .message.error').addClass('no-display');
 		}
 	}
 

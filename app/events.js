@@ -12,6 +12,15 @@ App.Events = (function(lng, app, undefined) {
 	});
 
 	/**
+		Element: Signout Button @ Place List
+		Event: tap
+		Action: Signout
+	*/
+	lng.dom('section#place-list a.button.logout').tap(function(event) {
+		App.Services.signout();
+	});
+	
+	/**
 		Element: Map Button @ Place List
 		Event: tap
 		Action: Render the Map of the current place list.
