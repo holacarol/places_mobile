@@ -34,6 +34,14 @@ App.View = (function(lng, app, undefined) {
 					overviewMapControl: true
 			});
 
+			// Create a single instance of the InfoWindow object which will be shared
+  			// by all Map objects to display information to the user.
+			infoWindow = new google.maps.InfoWindow();
+
+			// Make the info window close when clicking anywhere on the map.
+  			google.maps.event.addListener(lng.Sugar.GMap.instance(), 'click', _closeInfoWindow);
+
+
 			if (lng.Core.toType(places) == 'object') {
 				_placeMarkers(places.myplaces,"user");
 				_placeMarkers(places.friends,"friends");
@@ -77,17 +85,50 @@ App.View = (function(lng, app, undefined) {
 			}
 		}
 
-		var _placeMarker = function (place, marker) 
+		var _placeMarker = function (place, marker_type) 
 		{
-			lng.Sugar.GMap.addMarker(place,_getMarker(marker),false);
+			marker = lng.Sugar.GMap.addMarker(place,_getMarker(marker_type),false);
+
+			// Register event listeners to each marker to open a shared info
+  			// window displaying the marker's position when clicked or dragged.
+  			google.maps.event.addListener(marker, 'click', function() {
+    			_openInfoWindow(marker);
+  			});
+
+
 		}
 
 		var _getMarker = function (type) 
 		{
 			type = (type==undefined)?"user":type;
-			marker = (markers[type]!=undefined)?markers[type]:markers[DEFAULT_MARKER];
-			return marker;
+			marker_type = (markers[type]!=undefined)?markers[type]:markers[DEFAULT_MARKER];
+			return marker_type;
 		}
+
+		var infowindow = null;
+
+		/**
+ 		* Called when clicking anywhere on the map and closes the info window.
+ 		*/
+		var _closeInfoWindow = function() {
+  			infoWindow.close();
+		}
+
+		/**
+ 		* Opens the shared info window, anchors it to the specified marker, and
+ 		* displays the marker's position as its content.
+ 		*/
+		var _openInfoWindow = function(marker) {
+  			var markerLatLng = marker.getPosition();
+  			infoWindow.setContent([
+    			'<b>Marker position is:</b><br/>',
+    			markerLatLng.lat(),
+    			', ',
+    			markerLatLng.lng()
+  			].join(''));
+  			infoWindow.open(lng.Sugar.GMap.instance, marker);
+		}
+
 
 		return{
 			renderPlaceListMap : renderPlaceListMap,
