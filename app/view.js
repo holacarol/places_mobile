@@ -24,6 +24,10 @@ App.View = (function(lng, app, undefined) {
 			}
 		};
 
+		// Create a single instance of the InfoWindow object which will be shared
+		// by all Map objects to display information to the user.
+		var	infoWindow = new google.maps.InfoWindow();
+
 		var renderPlaceListMap = function(center, places, type)
 		{
 			lng.Sugar.GMap.init({
@@ -34,12 +38,8 @@ App.View = (function(lng, app, undefined) {
 					overviewMapControl: true
 			});
 
-			// Create a single instance of the InfoWindow object which will be shared
-  			// by all Map objects to display information to the user.
-			infoWindow = new google.maps.InfoWindow();
-
 			// Make the info window close when clicking anywhere on the map.
-  			google.maps.event.addListener(lng.Sugar.GMap.instance(), 'click', _closeInfoWindow);
+			google.maps.event.addListener(lng.Sugar.GMap.instance(), 'click', _closeInfoWindow);
 
 
 			if (lng.Core.toType(places) == 'object') {
@@ -60,7 +60,12 @@ App.View = (function(lng, app, undefined) {
 					center: place,
 					overviewMapControl: true
 			});
-			_placeMarker(place,'user');
+
+			// Make the info window close when clicking anywhere on the map.
+			google.maps.event.addListener(lng.Sugar.GMap.instance(), 'click', _closeInfoWindow);
+
+			_placeMarker(place,'user',true);
+
 		}
 
 		var renderPlaceMap = function(place)
@@ -75,71 +80,65 @@ App.View = (function(lng, app, undefined) {
 					disableDoubleClickZoom: true
 
 			});
-			_placeMarker(place,"user");
+			_placeMarker(place,'user',false);
 		}
 
 		var _placeMarkers = function (places_array, marker) {
 			for (var i=0; i<places_array.length; i++) {
 				var place = places_array[i];
-				_placeMarker(place,marker);
+				_placeMarker(place,marker,true);
 			}
 		}
 
-		var _placeMarker = function (place, marker_type) 
+		var _placeMarker = function (place, marker_type, enable_infowindow)
 		{
-			marker = lng.Sugar.GMap.addMarker(place,_getMarker(marker_type),false);
+			var marker = lng.Sugar.GMap.addMarker(place,_getMarker(marker_type),false);
 
-			// Register event listeners to each marker to open a shared info
-  			// window displaying the marker's position when clicked or dragged.
-  			google.maps.event.addListener(marker, 'click', function() {
-    			_openInfoWindow(marker);
-  			});
-
-
+			if (enable_infowindow) {
+				// Register event listeners to each marker to open a shared info
+				// window displaying the marker's position when clicked or dragged.
+				google.maps.event.addListener(marker, 'click', function() {
+					_openInfoWindow(marker, place);
+				});
+			}
 		}
 
-		var _getMarker = function (type) 
+		var _getMarker = function (type)
 		{
-			type = (type==undefined)?"user":type;
-			marker_type = (markers[type]!=undefined)?markers[type]:markers[DEFAULT_MARKER];
+			type = (type===undefined)?"user":type;
+			marker_type = (markers[type]!==undefined)?markers[type]:markers[DEFAULT_MARKER];
 			return marker_type;
 		}
 
-		var infowindow = null;
-
 		/**
- 		* Called when clicking anywhere on the map and closes the info window.
- 		*/
+		* Called when clicking anywhere on the map and closes the info window.
+		*/
 		var _closeInfoWindow = function() {
-  			infoWindow.close();
+			infoWindow.close();
 		}
 
 		/**
- 		* Opens the shared info window, anchors it to the specified marker, and
- 		* displays the marker's position as its content.
- 		*/
-		var _openInfoWindow = function(marker) {
-  			var markerLatLng = marker.getPosition();
-  			infoWindow.setContent([
-    			'<b>Marker position is:</b><br/>',
-    			markerLatLng.lat(),
-    			', ',
-    			markerLatLng.lng()
-  			].join(''));
-  			infoWindow.open(lng.Sugar.GMap.instance, marker);
+		* Opens the shared info window, anchors it to the specified marker, and
+		* displays the marker's position as its content.
+		*/
+		var _openInfoWindow = function(marker, place) {
+			infoWindow.setContent([
+				lng.View.Template.markup('place-infowindow', place)
+			].join(''));
+			infoWindow.open(lng.Sugar.GMap.instance(), marker);
 		}
 
 
 		return{
 			renderPlaceListMap : renderPlaceListMap,
 			renderPlaceMap : renderPlaceMap,
-			renderPlaceNavigationalMap : renderPlaceNavigationalMap,
+			renderPlaceNavigationalMap : renderPlaceNavigationalMap
 		}
 
 	})(LUNGO, App);
 
 	/** TEMPLATES **/
-	/** 
+	/**
 	  *  Template for Places in the list 
 	  */
 	lng.View.Template.create('place-in-list',
@@ -234,6 +233,21 @@ App.View = (function(lng, app, undefined) {
 				<div>\
 			</div>\
 		</div>'
+	);
+
+	/**
+	 * Template for infowindow on marker click
+	 */
+	lng.View.Template.create('place-infowindow',
+		'<div class="list"><ul>\
+			<li id="place-{{id}}" class="place selectable">\
+				<div class="selectable">\
+					<div><strong>{{title}}</strong>\
+						<small>{{address.streetAddress}}</small>\
+					</div>\
+				</div>\
+			 </li>\
+		 </ul></div>'
 	);
 
 	/**
