@@ -5,7 +5,7 @@ App.View = (function(lng, app, undefined) {
 
 		var DEFAULT_MARKER = "user";
 
-		var markers = 
+		var markers =
 		{
 			user: {
 				url: 'assets/images/mapmarker22x32.png',
@@ -51,7 +51,7 @@ App.View = (function(lng, app, undefined) {
 			if (lng.Core.toType(places) == 'array') {
 				_placeMarkers(places,type);
 			}
-		}
+		};
 
 		var renderPlaceNavigationalMap = function(place) {
 			lng.Sugar.GMap.init({
@@ -66,7 +66,7 @@ App.View = (function(lng, app, undefined) {
 
 			_placeMarker(place,'user',true);
 
-		}
+		};
 
 		var renderPlaceMap = function(place)
 		{
@@ -81,14 +81,14 @@ App.View = (function(lng, app, undefined) {
 
 			});
 			_placeMarker(place,'user',false);
-		}
+		};
 
 		var _placeMarkers = function (places_array, marker) {
 			for (var i=0; i<places_array.length; i++) {
 				var place = places_array[i];
 				_placeMarker(place,marker,true);
 			}
-		}
+		};
 
 		var _placeMarker = function (place, marker_type, enable_infowindow)
 		{
@@ -101,21 +101,21 @@ App.View = (function(lng, app, undefined) {
 					_openInfoWindow(marker, place);
 				});
 			}
-		}
+		};
 
 		var _getMarker = function (type)
 		{
 			type = (type===undefined)?"user":type;
 			marker_type = (markers[type]!==undefined)?markers[type]:markers[DEFAULT_MARKER];
 			return marker_type;
-		}
+		};
 
 		/**
 		* Called when clicking anywhere on the map and closes the info window.
 		*/
 		var _closeInfoWindow = function() {
 			infoWindow.close();
-		}
+		};
 
 		/**
 		* Opens the shared info window, anchors it to the specified marker, and
@@ -126,14 +126,14 @@ App.View = (function(lng, app, undefined) {
 				lng.View.Template.markup('place-infowindow', place)
 			].join(''));
 			infoWindow.open(lng.Sugar.GMap.instance(), marker);
-		}
+		};
 
 
 		return{
 			renderPlaceListMap : renderPlaceListMap,
 			renderPlaceMap : renderPlaceMap,
 			renderPlaceNavigationalMap : renderPlaceNavigationalMap
-		}
+		};
 
 	})(LUNGO, App);
 
