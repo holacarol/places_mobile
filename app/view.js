@@ -7,6 +7,11 @@ App.View = (function(lng, app, undefined) {
 
 		var markers =
 		{
+			me: {
+				url:'assets/images/bluedot.png',
+				size: {x: 16, y: 16},
+				anchor: {x: 8, y: 8}
+			},
 			user: {
 				//url: 'assets/images/mapmarker22x32.png',
 				url: 'assets/images/blue1.png',
@@ -44,6 +49,8 @@ App.View = (function(lng, app, undefined) {
 			// Make the info window close when clicking anywhere on the map.
 			google.maps.event.addListener(lng.Sugar.GMap.instance(), 'click', _closeInfoWindow);
 
+			//Place a marker at my own position
+			_placeMarker(center,'me',false);
 
 			if (lng.Core.toType(places) == 'object') {
 				_placeMarkers(places.myplaces,"user");
