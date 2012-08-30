@@ -165,7 +165,7 @@ App.View = (function(lng, app, undefined) {
 		'<li id="place-{{id}}" class="place selectable">\
 			<div class="onright"><a href="#" class="event like"><span class="icon star gray bigicon"></span></a></div>\
 			<div class="selectable">\
-				<div class="onleft icon pushpin"></div>\
+				<div class="onleft icon placepin"></div>\
 				<div><strong>{{title}}</strong>\
 					<small>{{address.locality}}. {{address.country}}</small>\
 				</div>\
