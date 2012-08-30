@@ -8,19 +8,22 @@ App.View = (function(lng, app, undefined) {
 		var markers =
 		{
 			user: {
-				url: 'assets/images/mapmarker22x32.png',
-				size: {x: 22, y: 37},
-				anchor: {x: 11, y: 37}
+				//url: 'assets/images/mapmarker22x32.png',
+				url: 'assets/images/blue1.png',
+				size: {x: 24, y: 33},
+				anchor: {x: 12, y: 33}
 			},
 			friends: {
-				url: 'assets/images/greenmarker22x32.png',
-				size: {x: 22, y: 37},
-				anchor: {x: 11, y: 37}
+				//url: 'assets/images/greenmarker22x32.png',
+				url: 'assets/images/green1.png',
+				size: {x: 24, y: 33},
+				anchor: {x: 12, y: 33}
 			},
 			recommended: {
-				url: 'assets/images/orangemarker22x32.png',
-				size: {x: 22, y: 37},
-				anchor: {x: 11, y: 37}
+				//url: 'assets/images/orangemarker22x32.png',
+				url: 'assets/images/red0.png',
+				size: {x: 24, y: 33},
+				anchor: {x: 12, y: 33}
 			}
 		};
 
@@ -44,8 +47,8 @@ App.View = (function(lng, app, undefined) {
 
 			if (lng.Core.toType(places) == 'object') {
 				_placeMarkers(places.myplaces,"user");
-				_placeMarkers(places.friends,"friends");
-				_placeMarkers(places.recommended,"recommended");
+				_placeMarkers(_filterPlaces(places.friends, places.myplaces),"friends");
+				_placeMarkers(_filterPlaces(places.recommended, places.friends),"recommended");
 			}
 
 			if (lng.Core.toType(places) == 'array') {
@@ -101,6 +104,23 @@ App.View = (function(lng, app, undefined) {
 					_openInfoWindow(marker, place);
 				});
 			}
+		};
+
+
+		/**
+		 * Filter places not being in other array. This is used to show only
+		 * friends' places not being in user's and recommended no being
+		 * in friends'
+		 */
+		var _filterPlaces = function(places_array, filter_array) {
+			return places_array.filter(function(p) {
+				for(var i = 0; i < filter_array.length; i++) {
+					if (filter_array[i].id === p.id) {
+						return false;
+					}
+				}
+				return true;
+			});
 		};
 
 		var _getMarker = function (type)
