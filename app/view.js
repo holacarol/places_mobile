@@ -52,6 +52,18 @@ App.View = (function(lng, app, undefined) {
 			//Place a marker at my own position
 			_placeMarker(center,'me',false);
 
+			//Draw an accuracy circle around my position
+			var circle = new google.maps.Circle({
+				center: new google.maps.LatLng(center.latitude, center.longitude),
+				radius: App.Data.userLocation.accuracy,
+				map: lng.Sugar.GMap.instance(),
+				fillColor: "#1464FC",
+				fillOpacity: 0.1,
+				strokeColor: "#1464FC",
+				strokeOpacity: 0.6,
+				strokeWeight: 2
+			});
+
 			if (lng.Core.toType(places) == 'object') {
 				_placeMarkers(places.myplaces,"user");
 				_placeMarkers(_filterPlaces(places.friends, places.myplaces),"friends");

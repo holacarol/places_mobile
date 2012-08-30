@@ -489,7 +489,7 @@ App.Services = (function(lng, app, undefined) {
 
 	var _setUserLocation = function (position)
 	{
-		App.Data.userLocation = { latitude : position.coords.latitude, longitude : position.coords.longitude};
+		App.Data.userLocation = { latitude : position.coords.latitude, longitude : position.coords.longitude, accuracy : position.coords.accuracy };
 	};
 
 	var _setUserLocationError = function (error)
