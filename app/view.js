@@ -29,6 +29,11 @@ App.View = (function(lng, app, undefined) {
 				url: 'assets/images/red4.png',
 				size: {x: 24, y: 33},
 				anchor: {x: 12, y: 33}
+			},
+			shadow: {
+				url: 'assets/images/shadow.png',
+				size: {x:32, y:33},
+				anchor: {x:12, y:33}
 			}
 		};
 
@@ -50,7 +55,8 @@ App.View = (function(lng, app, undefined) {
 			google.maps.event.addListener(lng.Sugar.GMap.instance(), 'click', _closeInfoWindow);
 
 			//Place a marker at my own position
-			_placeMarker(center,'me',false);
+			//_placeMarker(center,'me',false);
+			var marker = lng.Sugar.GMap.addMarker(center,_getMarker('me'),null,false);
 
 			//Draw an accuracy circle around my position
 			var circle = new google.maps.Circle({
@@ -114,7 +120,7 @@ App.View = (function(lng, app, undefined) {
 
 		var _placeMarker = function (place, marker_type, enable_infowindow)
 		{
-			var marker = lng.Sugar.GMap.addMarker(place,_getMarker(marker_type),false);
+			var marker = lng.Sugar.GMap.addMarker(place,_getMarker(marker_type), _getMarker('shadow'),false);
 
 			if (enable_infowindow) {
 				// Register event listeners to each marker to open a shared info

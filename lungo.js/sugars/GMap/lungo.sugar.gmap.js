@@ -61,13 +61,14 @@ LUNGO.Sugar.GMap = (function(lng, undefined) {
     };
 
     /**
-     *
+     * Modified to accept shadow icon, by @holacarol
      */
-    var addMarker = function(position, icon, animate) {
+    var addMarker = function(position, icon, shadow, animate) {
         if (position) {
             var marker = new google.maps.Marker({
                 map: _instance,
                 icon: this.Interface.MarkerIcon(icon),
+                shadow: this.Interface.MarkerIcon(shadow),
                 animation: google.maps.Animation.DROP,
                 position: this.Interface.LatLng(position)
             });
