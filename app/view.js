@@ -14,19 +14,19 @@ App.View = (function(lng, app, undefined) {
 			},
 			user: {
 				//url: 'assets/images/mapmarker22x32.png',
-				url: 'assets/images/blue1.png',
+				url: 'assets/images/blue4.png',
 				size: {x: 24, y: 33},
 				anchor: {x: 12, y: 33}
 			},
 			friends: {
 				//url: 'assets/images/greenmarker22x32.png',
-				url: 'assets/images/green1.png',
+				url: 'assets/images/green4.png',
 				size: {x: 24, y: 33},
 				anchor: {x: 12, y: 33}
 			},
 			recommended: {
 				//url: 'assets/images/orangemarker22x32.png',
-				url: 'assets/images/red0.png',
+				url: 'assets/images/red4.png',
 				size: {x: 24, y: 33},
 				anchor: {x: 12, y: 33}
 			}
