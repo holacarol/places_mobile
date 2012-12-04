@@ -39,7 +39,7 @@ App.Services = (function(lng, app, undefined) {
 
 	var signin = function (email, password) {
 		var url = App.Config.PLACES_API_URL + 'users/sign_in.json';
-		var data = "user[email]="+email+"&user[password]="+password;
+		var data = "user[email]="+email+"&user[password]="+password+"&user[remember_me]=1";
 		// data = JSON.stringify(data);
 		_init = true;
 		$$.post(url, data, function(response, xhr) {
