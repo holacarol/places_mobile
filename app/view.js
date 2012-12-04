@@ -273,7 +273,7 @@ App.View = (function(lng, app, undefined) {
 					<div>\
 						<p>\
 						{{phone_number}}<br>\
-						<a href="{{url}}">{{url}}</a>\
+						<a href="{{url}}">{{url_pretty}}</a>\
 					</div>\
 				<div>\
 			</div>\
@@ -335,6 +335,14 @@ App.View = (function(lng, app, undefined) {
 			App.Events.addTextAreaKeyboardEvent('section#place-view article#place-description .comments textarea');
 		}
 		/** Render the description template **/
+		if (place.url.indexOf('plus.google.com')>0) {
+			place.url_pretty = 'Google+ site';
+		}
+		else if (place.url.length > 35) {
+			place.url_pretty = place.url.substring(0,35) + '...';
+		} else {
+			place.url_pretty = place.url;
+		}
 		lng.View.Template.render('section#place-view article#place-description .info', 'place-description', place);
 		/** Render the small map for the place **/
 		Map.renderPlaceMap(place);
