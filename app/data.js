@@ -119,7 +119,12 @@ App.Data = (function(lng, app, undefined) {
 		var _getURL = function ()
 		{
 			if (_hasDetails()) {
-				return _original.url;
+				if (_original.website != undefined && _original.website != "") {
+					return _original.website;	
+				}
+				else {
+					return _original.url;
+				}
 			} else if (_isGoogle()) {
 				return "";
 			} else {
